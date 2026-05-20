@@ -1,0 +1,23 @@
+# Python-Kompilate und Caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtuelle Umgebungen
+.venv/
+venv/
+ENV/
+env/
+
+# IDE / Editor Einstellungen
+.vscode/
+.idea/
+.DS_Store
+
+# Marimo-Logs und temporäre Dateien
+.marimo/
+marimo_log.txt
+
+# Alte Backups und Testdateien
+old_workshop.py
+test_pattern.py

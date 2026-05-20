@@ -1,0 +1,74 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.6",
+    "script_metadata_hash": null
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "64b86e0eb9c6f9e2b545c89e78880017",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "44d624c4772c8b2f862de2c4219b285f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "1c16ef063a3a9590a00c3d4ece2972e0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "a4e6fe80ba269cac1a948f547b1c24ec",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "8a75161f9b4fef99a213b789bcfb6153",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"woche-2-von-10\">Woche 2 von 10</h2></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Wettervorhersage &amp; Kontext:</strong></span>\n<ul>\n<li>Temperatur: <strong>4.3 \u00b0C</strong></li>\n<li>Regen wahrscheinlich: <strong>Ja</strong></li>\n<li>Lokales Event: <strong>Nein</strong></li>\n<li>Ferien/Feiertag: <strong>Ja</strong></li>\n</ul></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Wie viele Bowls bereiten Sie vor?</span></span><marimo-ui-element object-id='vblA-1' random-id='c26f8250-3738-1ff5-7ee1-9201130b920d'><marimo-number data-initial-value='50' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Ihre Bestellmenge f\u00fcr diese Woche:&lt;/span&gt;&lt;/span&gt;&quot;' data-step='1' data-debounce='false' data-full-width='false' data-disabled='false'></marimo-number></marimo-ui-element><marimo-ui-element object-id='vblA-2' random-id='6c034fdc-04be-e7ca-ee4e-a151fb7da5cd'><marimo-button data-initial-value='0' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Entscheidung abschicken&lt;/span&gt;&lt;/span&gt;&quot;' data-kind='&quot;success&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><hr /></span><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"bisheriger-spielverlauf-historie\">Bisheriger Spielverlauf (Historie)</h3></span><marimo-ui-element object-id='bkHC-0' random-id='40bb3d3d-9daa-690a-588c-09ae7fd54707'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;Woche&#92;&quot;:1,&#92;&quot;Temperatur&#92;&quot;:&#92;&quot;-1.4 &#92;&#92;u00b0C&#92;&quot;,&#92;&quot;Regen&#92;&quot;:&#92;&quot;Nein&#92;&quot;,&#92;&quot;Event&#92;&quot;:&#92;&quot;Nein&#92;&quot;,&#92;&quot;Ferien&#92;&quot;:&#92;&quot;Ja&#92;&quot;,&#92;&quot;Bestellmenge&#92;&quot;:50,&#92;&quot;Nachfrage&#92;&quot;:58,&#92;&quot;Kosten (&#92;&#92;u20ac)&#92;&quot;:&#92;&quot;44.00 &#92;&#92;u20ac&#92;&quot;,&#92;&quot;Profit (&#92;&#92;u20ac)&#92;&quot;:&#92;&quot;275.00 &#92;&#92;u20ac&#92;&quot;}]&quot;' data-total-rows='1' data-total-columns='9' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='false' data-page-size='10' data-field-types='[[&quot;Woche&quot;,[&quot;integer&quot;,&quot;int64&quot;]],[&quot;Temperatur&quot;,[&quot;string&quot;,&quot;object&quot;]],[&quot;Regen&quot;,[&quot;string&quot;,&quot;object&quot;]],[&quot;Event&quot;,[&quot;string&quot;,&quot;object&quot;]],[&quot;Ferien&quot;,[&quot;string&quot;,&quot;object&quot;]],[&quot;Bestellmenge&quot;,[&quot;integer&quot;,&quot;int64&quot;]],[&quot;Nachfrage&quot;,[&quot;integer&quot;,&quot;int64&quot;]],[&quot;Kosten (\u20ac)&quot;,[&quot;string&quot;,&quot;object&quot;]],[&quot;Profit (\u20ac)&quot;,[&quot;string&quot;,&quot;object&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='false' data-show-data-types='true' data-show-page-size-selector='false' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[]' data-has-stable-row-id='false' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element></div></div>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}
