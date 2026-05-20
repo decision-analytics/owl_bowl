@@ -318,7 +318,7 @@ def _(df, mo):
     })
     context_table = mo.ui.table(sample_df.round(3))
 
-    context_content = mo.vstack([
+    slide_context = mo.vstack([
         mo.md("## Data Science und Maschinelles Lernen: Kontext-Informationen nutzen\n\nBevor wir ein Machine-Learning-Modell trainieren, müssen wir verstehen, welche Daten ihm zur Verfügung stehen. Im Gegensatz zum einfachen Mittelwert-Forecast nutzen wir nun ein fortgeschrittenes ML-Modell (XGBoost), das folgende zusätzliche Kontextinformationen (Features), um die Nachfrage (Label) vorherzusagen:"),
         mo.md("""
     ### Unsere Datenstruktur:
@@ -332,12 +332,12 @@ def _(df, mo):
         mo.md("### Beispielhafte Datenzeilen (Features und Label):"),
         context_table
     ])
-    return (context_content,)
+    return (slide_context,)
 
 
 @app.cell
-def _(context_content):
-    context_content
+def _(slide_context):
+    slide_context
     return
 
 
