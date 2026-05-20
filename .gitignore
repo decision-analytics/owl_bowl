@@ -16,6 +16,7 @@ env/
 
 # Marimo-Logs und temporäre Dateien
 .marimo/
+__marimo__/
 marimo_log.txt
 
 # Alte Backups und Testdateien
