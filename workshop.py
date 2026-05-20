@@ -150,6 +150,12 @@ def _(mo):
 
 
 @app.cell
+def _(controls):
+    controls
+    return
+
+
+@app.cell
 def _(
     include_spikes,
     n_years,
@@ -190,7 +196,11 @@ def _(df, mo, plt):
               "ob es 'fat tails' (viele kleine oder große Ausreißer) gibt."),
         fig_dist
     ])
+    return (tab_dist_content,)
 
+
+@app.cell
+def _(tab_dist_content):
     tab_dist_content
     return
 
@@ -227,7 +237,11 @@ def _(
         mo.md(f"Wir betrachten hier die Baseline-Strategie, bei der wir jeden Samstag konstant **{mean_demand:.0f}** Bowls bestellen, basierend auf dem Durchschnitt der historischen Daten."),
         summary_table
     ])
+    return (tab_mean_analysis,)
 
+
+@app.cell
+def _(tab_mean_analysis):
     tab_mean_analysis
     return
 
@@ -308,7 +322,7 @@ def _(df, mo):
         mo.md("## Data Science und Maschinelles Lernen: Kontext-Informationen nutzen\n\nBevor wir ein Machine-Learning-Modell trainieren, müssen wir verstehen, welche Daten ihm zur Verfügung stehen. Im Gegensatz zum einfachen Mittelwert-Forecast nutzen wir nun ein fortgeschrittenes ML-Modell (XGBoost), das folgende zusätzliche Kontextinformationen (Features), um die Nachfrage (Label) vorherzusagen:"),
         mo.md("""
     ### Unsere Datenstruktur:
-    *   **Das Label ( vorherzusagende Zielgröße)**: `Nachfrage` (wie viele Einheiten tatsächlich nachgefragt wurden).
+    *   **Das Label (vorherzusagende Zielgröße)**: `Nachfrage` (wie viele Einheiten tatsächlich nachgefragt wurden).
     *   **Die Features (Einflussfaktoren)**:
         *   **Saisonalität (zwei Werte)**: Erfasst wöchentliche Zyklen über das Jahr hinweg.
         *   **Wetter (`Temperatur` & `Regen`)**: Erfasst den Einfluss von Hitze oder Niederschlag auf den Stadionbesuch.
@@ -480,68 +494,6 @@ def _(tab3d_content):
 
 
 @app.cell
-def _(tab5_content):
-    tab5_content
-    return
-
-
-@app.cell
-def _(
-    NewsvendorCosts,
-    detail,
-    mo,
-    newsvendor_cost,
-    overage_cost,
-    pd,
-    plt,
-    simulate_true_demand_for_week_context,
-    underage_cost,
-    week_selector,
-):
-    selected_week = week_selector.value
-    row = detail[detail["week"] == selected_week].iloc[0]
-
-    costs = NewsvendorCosts(float(overage_cost.value), float(underage_cost.value))
-
-    q_layman = row["q_layman"]
-    q_xgb = row["q_xgb"]
-    q_ngb = row["q_ngb"]
-
-    true_samples = simulate_true_demand_for_week_context(row, n_samples=10000, seed=42)
-
-    true_cost_layman = newsvendor_cost(q_layman, true_samples, costs).mean()
-    true_cost_xgb = newsvendor_cost(q_xgb, true_samples, costs).mean()
-    true_cost_ngb = newsvendor_cost(q_ngb, true_samples, costs).mean()
-
-    fig_single, ax_single = plt.subplots(figsize=(9, 4))
-    ax_single.hist(true_samples, bins=range(200), alpha=0.5, color='gray', density=True, label="Wahre Verteilung (10k Samples)")
-    ax_single.axvline(q_layman, color='blue', linestyle='--', label=f"Mittelwert (q={q_layman:.0f})")
-    ax_single.axvline(q_xgb, color='orange', linestyle='--', label=f"XGBoost (q={q_xgb:.0f})")
-    ax_single.axvline(q_ngb, color='green', linestyle='--', label=f"NGBoost (q={q_ngb:.0f})")
-    ax_single.set_xlabel("Nachfrage")
-    ax_single.set_ylabel("Dichte")
-    ax_single.set_title(f"Wahre bedingte Nachfrageverteilung für Woche {selected_week}")
-    ax_single.legend()
-    ax_single.grid(alpha=0.3)
-
-    eval_table = pd.DataFrame({
-        "Policy": ["Mittelwert", "XGBoost", "NGBoost"],
-        "Bestellmenge": [q_layman, q_xgb, q_ngb],
-        "Tatsächliche Kosten (im Backtest)": [f"{row['cost_layman']:.2f} €", f"{row['cost_xgb']:.2f} €", f"{row['cost_ngb']:.2f} €"],
-        "Wahre erwartete Kosten": [f"{true_cost_layman:.2f} €", f"{true_cost_xgb:.2f} €", f"{true_cost_ngb:.2f} €"]
-    })
-
-    tab5_content = mo.vstack([
-        mo.md(f"## Evaluation der Politik in Woche {selected_week}"),
-        week_selector,
-        mo.md("Hier evaluieren wir die Entscheidungen aus der Backtest-Simulation gegen die **wahre datengenerierende bedingte Verteilung** dieser spezifischen Woche. \n\nStandardmäßig ist eine Woche ausgewählt, in der die simple Mittelwert-Regel in der Simulation geringere Kosten erzielt hat als der XGBoost Punkt-Forecast."),
-        fig_single,
-        eval_table
-    ])
-    return (tab5_content,)
-
-
-@app.cell
 def _(detail, mo, pd, plt, summary):
     fig_eval1, ax_eval1 = plt.subplots(figsize=(11, 4))
     ax_eval1.plot(detail["week"], detail["demand"], label="Realisierte Nachfrage", linewidth=2, color='black')
@@ -676,6 +628,68 @@ def _(detail, mo):
 
 
 @app.cell
+def _(
+    NewsvendorCosts,
+    detail,
+    mo,
+    newsvendor_cost,
+    overage_cost,
+    pd,
+    plt,
+    simulate_true_demand_for_week_context,
+    underage_cost,
+    week_selector,
+):
+    selected_week = week_selector.value
+    row = detail[detail["week"] == selected_week].iloc[0]
+
+    costs = NewsvendorCosts(float(overage_cost.value), float(underage_cost.value))
+
+    q_layman = row["q_layman"]
+    q_xgb = row["q_xgb"]
+    q_ngb = row["q_ngb"]
+
+    true_samples = simulate_true_demand_for_week_context(row, n_samples=10000, seed=42)
+
+    true_cost_layman = newsvendor_cost(q_layman, true_samples, costs).mean()
+    true_cost_xgb = newsvendor_cost(q_xgb, true_samples, costs).mean()
+    true_cost_ngb = newsvendor_cost(q_ngb, true_samples, costs).mean()
+
+    fig_single, ax_single = plt.subplots(figsize=(9, 4))
+    ax_single.hist(true_samples, bins=range(200), alpha=0.5, color='gray', density=True, label="Wahre Verteilung (10k Samples)")
+    ax_single.axvline(q_layman, color='blue', linestyle='--', label=f"Mittelwert (q={q_layman:.0f})")
+    ax_single.axvline(q_xgb, color='orange', linestyle='--', label=f"XGBoost (q={q_xgb:.0f})")
+    ax_single.axvline(q_ngb, color='green', linestyle='--', label=f"NGBoost (q={q_ngb:.0f})")
+    ax_single.set_xlabel("Nachfrage")
+    ax_single.set_ylabel("Dichte")
+    ax_single.set_title(f"Wahre bedingte Nachfrageverteilung für Woche {selected_week}")
+    ax_single.legend()
+    ax_single.grid(alpha=0.3)
+
+    eval_table = pd.DataFrame({
+        "Policy": ["Mittelwert", "XGBoost", "NGBoost"],
+        "Bestellmenge": [q_layman, q_xgb, q_ngb],
+        "Tatsächliche Kosten (im Backtest)": [f"{row['cost_layman']:.2f} €", f"{row['cost_xgb']:.2f} €", f"{row['cost_ngb']:.2f} €"],
+        "Wahre erwartete Kosten": [f"{true_cost_layman:.2f} €", f"{true_cost_xgb:.2f} €", f"{true_cost_ngb:.2f} €"]
+    })
+
+    tab5_content = mo.vstack([
+        mo.md(f"## Evaluation der Politik in Woche {selected_week}"),
+        week_selector,
+        mo.md("Hier evaluieren wir die Entscheidungen aus der Backtest-Simulation gegen die **wahre datengenerierende bedingte Verteilung** dieser spezifischen Woche. \n\nStandardmäßig ist eine Woche ausgewählt, in der die simple Mittelwert-Regel in der Simulation geringere Kosten erzielt hat als der XGBoost Punkt-Forecast."),
+        fig_single,
+        eval_table
+    ])
+    return (tab5_content,)
+
+
+@app.cell
+def _(tab5_content):
+    tab5_content
+    return
+
+
+@app.cell
 def _(mo, plt, q_scan_example):
     fig_quant, ax_quant = plt.subplots(figsize=(9, 4))
     ax_quant.plot(q_scan_example["tau"], q_scan_example["avg_cost"], marker="o")
@@ -693,6 +707,12 @@ def _(mo, plt, q_scan_example):
         mo.md("Tabelle der Quantile in Woche 1:"),
         q_scan_example
     ])
+    return (tab6_content,)
+
+
+@app.cell
+def _(tab6_content):
+    tab6_content
     return
 
 
@@ -932,6 +952,12 @@ def _(
     return (game_ui,)
 
 
+@app.cell
+def _(game_ui):
+    game_ui
+    return
+
+
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
@@ -944,18 +970,6 @@ def _(mo):
     - Ein Unsicherheitssimulator ist oftmals die Grundlage für die Bewertung von Entscheidungen und Politiken unter Unsicherheit
     - Entscheidungen, die auf Mittelwerten basieren, sind im Mittel suboptimal (das selbe gilt für Entscheidungen, die auf Punktschätzern basieren)
     """)
-    return
-
-
-@app.cell
-def _(game_ui):
-    game_ui
-    return
-
-
-@app.cell
-def _(controls):
-    controls
     return
 
 
