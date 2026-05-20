@@ -189,19 +189,19 @@ def _(df, mo, plt):
     ax_dist.grid(alpha=0.3)
 
     # Layout für die "Histogramm-Folie"
-    tab_dist_content = mo.vstack([
+    slide_distribution = mo.vstack([
         mo.md("## Histogramm der historischen Daten"),
         mo.md("Diese Darstellung zeigt uns, wie häufig welche Nachfragemengen in der Vergangenheit aufgetreten sind. "
               "Dies hilft uns zu verstehen, ob die Nachfrage eher normalverteilt ist oder "
               "ob es 'fat tails' (viele kleine oder große Ausreißer) gibt."),
         fig_dist
     ])
-    return (tab_dist_content,)
+    return (slide_distribution,)
 
 
 @app.cell
-def _(tab_dist_content):
-    tab_dist_content
+def _(slide_distribution):
+    slide_distribution
     return
 
 
@@ -232,17 +232,17 @@ def _(
         "Wert": [f"{mean_demand:.2f}", f"{mae_mean:.2f}", f"{rmse_mean:.2f}", f"{expected_costs_mean:.2f} €", f"{expected_profit_mean:.2f} €"]
     })
 
-    tab_mean_analysis = mo.vstack([
+    slide_naive_analysis = mo.vstack([
         mo.md("## Analyse: Naive Strategie (Historischer Mittelwert)"),
         mo.md(f"Wir betrachten hier die Baseline-Strategie, bei der wir jeden Samstag konstant **{mean_demand:.0f}** Bowls bestellen, basierend auf dem Durchschnitt der historischen Daten."),
         summary_table
     ])
-    return (tab_mean_analysis,)
+    return (slide_naive_analysis,)
 
 
 @app.cell
-def _(tab_mean_analysis):
-    tab_mean_analysis
+def _(slide_naive_analysis):
+    slide_naive_analysis
     return
 
 
@@ -255,16 +255,16 @@ def _(df, mo, plt):
     ax_hist.set_ylabel("Nachfrage")
     ax_hist.grid(alpha=0.3)
 
-    tab1_content = mo.vstack([
+    slide_timeseries = mo.vstack([
         mo.md("## Jetzt kommt Data Science ins Spiel: Historische Daten im Zeitverlauf\n\nWir sehen hier die (simulierte) Historie der Nachfrage über alle vergangenen Jahre. Die Daten unterliegen saisonalen Schwankungen, Wettereinflüssen und Einflüssen wie Ferien"),
         fig_hist
     ])
-    return (tab1_content,)
+    return (slide_timeseries,)
 
 
 @app.cell
-def _(tab1_content):
-    tab1_content
+def _(slide_timeseries):
+    slide_timeseries
     return
 
 
@@ -281,7 +281,7 @@ def _(detail, mo, pd, plt, summary):
     ax_Mittelwert.grid(alpha=0.3)
     fig_Mittelwert = plt.gca()
 
-    tab2_content = mo.vstack([
+    slide_mean_forecast = mo.vstack([
         mo.md("## Statische Vorhersage mittels Mittelwert\n\nEine einfache Vorhersage mittels Mittelwert ignoriert Schwankungen, ignoriert Kontextinformationen und nimmt einfach den historischen Gesamtmittelwert der Trainingsjahre (alles außer das Testjahr) als Forecast und zugleich als Bestellmenge. Wir evaluieren diesen Ansatz auf dem letzten Jahr (Testjahr)."),
         mo.md(f"**Geschätzter Mittelwert:** `{summary['mean_based_mean']:.0f}`"),
         fig_Mittelwert,
@@ -294,12 +294,12 @@ def _(detail, mo, pd, plt, summary):
             ]
         })
     ])
-    return (tab2_content,)
+    return (slide_mean_forecast,)
 
 
 @app.cell
-def _(tab2_content):
-    tab2_content
+def _(slide_mean_forecast):
+    slide_mean_forecast
     return
 
 
@@ -361,18 +361,18 @@ def _(detail, mo, pd, plt, summary):
         "XGBoost": [summary["mae_xgb"], summary["rmse_xgb"]]
     }).set_index("Metrik").round(2)
 
-    tab3_content = mo.vstack([
+    slide_xgb_forecast = mo.vstack([
         mo.md("## Data Science: Vorhersage mittels Features (XGBoost)\n\nJetzt trainieren wir ein moderneres Modell (`XGBoost`) auf den historischen Trainingsjahren. Dieses Modell lernt aus Kontextdaten (Wetter, Saisonalität, etc.). Wir evaluieren die Vorhersage-Güte ebenfalls auf dem letzten Jahr (Testjahr)."),
         fig_xgb,
         mo.md("### Vergleich der Vorhersage-Güte"),
         metrics_df
     ])
-    return (tab3_content,)
+    return (slide_xgb_forecast,)
 
 
 @app.cell
-def _(tab3_content):
-    tab3_content
+def _(slide_xgb_forecast):
+    slide_xgb_forecast
     return
 
 
@@ -406,7 +406,7 @@ def _(detail, mo, pd, plt, summary):
     better_forecast_xgb = summary["mae_xgb"] < summary["mae_mean_based"]
     better_decision_xgb = summary["annual_cost_xgb_point"] < summary["annual_cost_mean_based_point"]
 
-    tab3b_content = mo.vstack([
+    slide_decision_comparison = mo.vstack([
         mo.md("## Entscheidungs-Evaluation: Mittelwert vs. ML-Modell\n\nFührt das bessere Machine-Learning-Vorhersagemodell automatisch zu besseren Entscheidungen und geringeren Kosten? Wir vergleichen die Kosten der Bestellentscheidungen über das Testjahr."),
         decision_table_xgb,
         mo.md(f"""
@@ -419,18 +419,18 @@ def _(detail, mo, pd, plt, summary):
         fig_eval1_xgb,
         fig_eval2_xgb
     ])
-    return (tab3b_content,)
+    return (slide_decision_comparison,)
 
 
 @app.cell
-def _(tab3b_content):
-    tab3b_content
+def _(slide_decision_comparison):
+    slide_decision_comparison
     return
 
 
 @app.cell
 def _(mo):
-    tab3c_content = mo.vstack([
+    slide_ngboost_intro = mo.vstack([
         mo.md("## Der Ausweg: Probabilistische Prognosen (Verteilungsprognose)"),
         mo.md("""
         In der Praxis ist die Nachfrage nie eine feste Zahl, sondern eine Verteilung mit Unsicherheit. 
@@ -442,12 +442,12 @@ def _(mo):
         - Mit dieser Verteilung können wir mathematisch genau ermitteln, welche Bestellmenge das Risiko minimiert.
         """)
     ])
-    return (tab3c_content,)
+    return (slide_ngboost_intro,)
 
 
 @app.cell
-def _(tab3c_content):
-    tab3c_content
+def _(slide_ngboost_intro):
+    slide_ngboost_intro
     return
 
 
@@ -473,7 +473,7 @@ def _(mo, plt, q_scan_all_weeks, summary):
     ax_quant_all.legend()
     ax_quant_all.grid(alpha=0.25)
 
-    tab3d_content = mo.vstack([
+    slide_quantile_optimization = mo.vstack([
         mo.md("## Optimierung über Quantile (Im Mittel über alle Wochen)"),
         mo.md("""
         Wir können für jede Woche simulieren, wie hoch die erwarteten Kosten für verschiedene Quantile (Sicherheitsstufen) wären. 
@@ -484,12 +484,12 @@ def _(mo, plt, q_scan_all_weeks, summary):
         """),
         fig_quant_all
     ])
-    return (tab3d_content,)
+    return (slide_quantile_optimization,)
 
 
 @app.cell
-def _(tab3d_content):
-    tab3d_content
+def _(slide_quantile_optimization):
+    slide_quantile_optimization
     return
 
 
@@ -526,7 +526,7 @@ def _(detail, mo, pd, plt, summary):
     better_decision = summary["annual_cost_xgb_point"] < summary["annual_cost_mean_based_point"]
     ngb_beats_xgb = summary["annual_cost_ngb_prob"] < summary["annual_cost_xgb_point"]
 
-    tab4_content = mo.vstack([
+    slide_backtest_evaluation = mo.vstack([
         mo.md("## Evaluation der Politik anhand der historischen Simulation\n\nWir bewerten nun die Politiken mit der asymmetrischen Kostenstruktur (Überbestand vs. Unterbestand). Wir nehmen hier zusätzlich die NGBoost probabilistische Methode hinzu, welche durch Simulation das beste Quantil ermittelt."),
         decision_table,
         mo.md(f"""
@@ -540,12 +540,12 @@ def _(detail, mo, pd, plt, summary):
         fig_eval1,
         fig_eval2
     ])
-    return (tab4_content,)
+    return (slide_backtest_evaluation,)
 
 
 @app.cell
-def _(tab4_content):
-    tab4_content
+def _(slide_backtest_evaluation):
+    slide_backtest_evaluation
     return
 
 
@@ -592,7 +592,7 @@ def _(mo, pd, summary_longterm):
     better_decision_longterm = summary_longterm["annual_cost_xgb_point"] < summary_longterm["annual_cost_mean_based_point"]
     ngb_beats_xgb_longterm = summary_longterm["annual_cost_ngb_prob"] < summary_longterm["annual_cost_xgb_point"]
 
-    tab4b_content = mo.vstack([
+    slide_longterm_evaluation = mo.vstack([
         mo.md("## Langzeit-Evaluation der Politiken (40 Jahre Simulation)"),
         mo.md("Um die Robustheit der gelernten Politiken über einen langen Zeithorizont und mehrere Testjahre hinweg zu prüfen, simulieren wir hier eine Welt mit **40 Jahren** Datenhistorie. Wir teilen diese in **30 Jahre Training** und **10 Jahre Testing** auf. Hierbei sind keine Abbildungen enthalten, um den Fokus rein auf die langfristigen Kosten zu legen."),
         decision_table_longterm,
@@ -605,12 +605,12 @@ def _(mo, pd, summary_longterm):
     Auch über einen sehr langen Zeithorizont (10 Testjahre) und bei reichlich Trainingsdaten (30 Jahre) zeigt sich: Der probabilistische Ansatz von NGBoost spart signifikant Kosten, da er die asymmetrische Kostenstruktur explizit in die Entscheidung einbezieht!
         """)
     ])
-    return (tab4b_content,)
+    return (slide_longterm_evaluation,)
 
 
 @app.cell
-def _(tab4b_content):
-    tab4b_content
+def _(slide_longterm_evaluation):
+    slide_longterm_evaluation
     return
 
 
@@ -673,19 +673,19 @@ def _(
         "Wahre erwartete Kosten": [f"{true_cost_mean_based:.2f} €", f"{true_cost_xgb:.2f} €", f"{true_cost_ngb:.2f} €"]
     })
 
-    tab5_content = mo.vstack([
+    slide_single_week_evaluation = mo.vstack([
         mo.md(f"## Evaluation der Politik in Woche {selected_week}"),
         week_selector,
         mo.md("Hier evaluieren wir die Entscheidungen aus der Backtest-Simulation gegen die **wahre datengenerierende bedingte Verteilung** dieser spezifischen Woche. \n\nStandardmäßig ist eine Woche ausgewählt, in der die simple Mittelwert-Regel in der Simulation geringere Kosten erzielt hat als der XGBoost Punkt-Forecast."),
         fig_single,
         eval_table
     ])
-    return (tab5_content,)
+    return (slide_single_week_evaluation,)
 
 
 @app.cell
-def _(tab5_content):
-    tab5_content
+def _(slide_single_week_evaluation):
+    slide_single_week_evaluation
     return
 
 
@@ -701,18 +701,18 @@ def _(mo, plt, q_scan_example):
     ax_quant.legend()
     ax_quant.grid(alpha=0.25)
 
-    tab6_content = mo.vstack([
+    slide_quantile_scan = mo.vstack([
         mo.md("## Manuelles Durchspielen von Quantilen\n\nDie NGBoost-Policy ermittelt für jede Woche eine prädiktive Verteilung der Nachfrage. \nAnstatt analytisch vorzugehen, ziehen wir Samples aus der Verteilung und berechnen für eine Reihe von Quantilen (tau) die simulierten erwarteten Kosten. Das Minimum wird als Bestellmenge gewählt."),
         fig_quant,
         mo.md("Tabelle der Quantile in Woche 1:"),
         q_scan_example
     ])
-    return (tab6_content,)
+    return (slide_quantile_scan,)
 
 
 @app.cell
-def _(tab6_content):
-    tab6_content
+def _(slide_quantile_scan):
+    slide_quantile_scan
     return
 
 
@@ -920,7 +920,7 @@ def _(
                 f"- **Profit:** 8.50€ * {q} (Umsatz) - 3.00€ * {q} (Kosten) = **{profit:.2f} €**."
             )
 
-        game_ui = mo.vstack([
+        slide_game = mo.vstack([
             mo.md(f"## Ergebnis für Woche {res['Woche']}"),
             mo.md(f"- Ihre Bestellmenge: **{q}**\n"
                   f"- Tatsächliche Nachfrage: **{d}**\n"
@@ -940,7 +940,7 @@ def _(
         total_costs = history_df["Kosten (€)"].sum()
         total_profit = history_df["Profit (€)"].sum()
 
-        game_ui = mo.vstack([
+        slide_game = mo.vstack([
             mo.md("## Spielende!"),
             mo.md(f"Ihre Gesamtkosten über 10 Wochen: **{total_costs:.2f} €**\n\n"
                   f"Ihr erzielter Gesamtprofit: **{total_profit:.2f} €**"
@@ -949,12 +949,12 @@ def _(
             mo.md(""),
             restart_btn
         ])
-    return (game_ui,)
+    return (slide_game,)
 
 
 @app.cell
-def _(game_ui):
-    game_ui
+def _(slide_game):
+    slide_game
     return
 
 
