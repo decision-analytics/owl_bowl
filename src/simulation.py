@@ -8,8 +8,8 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 from src.data import FEATURES, split_train_test, simulate_history
 from src.costs import NewsvendorCosts, newsvendor_cost
 from src.models import (
-    fit_layman_mean,
-    predict_layman_mean,
+    fit_mean_based_mean,
+    predict_mean_based_mean,
     fit_xgb_point_model,
     fit_ngboost_model,
     sample_ngboost_predictive_distribution,
@@ -42,26 +42,26 @@ def run_backtest_one_world(
 
     tau_grid = np.linspace(tau_low, tau_high, tau_steps)
 
-    # Phase 1: Layman
-    layman_mean = fit_layman_mean(train)
-    forecast_layman = predict_layman_mean(layman_mean, len(test))
+    # Phase 1: Mean-based
+    mean_based_mean = fit_mean_based_mean(train)
+    forecast_mean_based = predict_mean_based_mean(mean_based_mean, len(test))
 
     # Phase 2: XGBoost Punktprognose
     xgb_model = fit_xgb_point_model(train)
     forecast_xgb = xgb_model.predict(X_test)
 
     # Forecasting-Metriken
-    mae_layman = mean_absolute_error(y_test, forecast_layman)
+    mae_mean_based = mean_absolute_error(y_test, forecast_mean_based)
     mae_xgb = mean_absolute_error(y_test, forecast_xgb)
 
-    rmse_layman = np.sqrt(mean_squared_error(y_test, forecast_layman))
+    rmse_mean_based = np.sqrt(mean_squared_error(y_test, forecast_mean_based))
     rmse_xgb = np.sqrt(mean_squared_error(y_test, forecast_xgb))
 
     # Phase 3: Eingebettete Policy q = Punktforecast
-    q_layman = clip_round_positive(forecast_layman)
+    q_mean_based = clip_round_positive(forecast_mean_based)
     q_xgb = clip_round_positive(forecast_xgb)
 
-    cost_layman = newsvendor_cost(q_layman, y_test, costs)
+    cost_mean_based = newsvendor_cost(q_mean_based, y_test, costs)
     cost_xgb = newsvendor_cost(q_xgb, y_test, costs)
 
     # Phase 4: NGBoost probabilistisch + brute-force Quantilgitter (vektorisiert für maximale Performance)
@@ -105,18 +105,18 @@ def run_backtest_one_world(
     cost_ngb = newsvendor_cost(q_ngb, y_test, costs)
 
     detail = test.copy()
-    detail["forecast_layman"] = forecast_layman
+    detail["forecast_mean_based"] = forecast_mean_based
     detail["forecast_xgb"] = forecast_xgb
     detail["forecast_ngb_mean"] = demand_mean_ngb
-    detail["q_layman"] = q_layman
+    detail["q_mean_based"] = q_mean_based
     detail["q_xgb"] = q_xgb
     detail["q_ngb"] = q_ngb
     detail["tau_ngb"] = tau_ngb
     detail["expected_cost_ngb"] = expected_cost_ngb
-    detail["cost_layman"] = cost_layman
+    detail["cost_mean_based"] = cost_mean_based
     detail["cost_xgb"] = cost_xgb
     detail["cost_ngb"] = cost_ngb
-    detail["cum_cost_layman"] = detail["cost_layman"].cumsum()
+    detail["cum_cost_mean_based"] = detail["cost_mean_based"].cumsum()
     detail["cum_cost_xgb"] = detail["cost_xgb"].cumsum()
     detail["cum_cost_ngb"] = detail["cost_ngb"].cumsum()
 
@@ -130,15 +130,15 @@ def run_backtest_one_world(
             "seed": seed,
             "n_years": n_years,
             "critical_fractile_reference": costs.critical_fractile,
-            "layman_mean": float(layman_mean),
-            "mae_layman": float(mae_layman),
+            "mean_based_mean": float(mean_based_mean),
+            "mae_mean_based": float(mae_mean_based),
             "mae_xgb": float(mae_xgb),
-            "rmse_layman": float(rmse_layman),
+            "rmse_mean_based": float(rmse_mean_based),
             "rmse_xgb": float(rmse_xgb),
-            "annual_cost_layman_point": float(cost_layman.sum() / n_test_years),
+            "annual_cost_mean_based_point": float(cost_mean_based.sum() / n_test_years),
             "annual_cost_xgb_point": float(cost_xgb.sum() / n_test_years),
             "annual_cost_ngb_prob": float(cost_ngb.sum() / n_test_years),
-            "avg_weekly_cost_layman_point": float(cost_layman.mean()),
+            "avg_weekly_cost_mean_based_point": float(cost_mean_based.mean()),
             "avg_weekly_cost_xgb_point": float(cost_xgb.mean()),
             "avg_weekly_cost_ngb_prob": float(cost_ngb.mean()),
         }

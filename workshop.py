@@ -273,7 +273,7 @@ def _(detail, mo, pd, plt, summary):
     # Berechnung für die Visualisierung des Testjahrs (52 Wochen)
     fig_Mittelwert, ax_Mittelwert = plt.subplots(figsize=(11, 3))
     ax_Mittelwert.plot(detail["week"], detail["demand"], label="Tatsächliche Nachfrage", marker='o', alpha=0.6, color='black')
-    ax_Mittelwert.plot(detail["week"], detail["forecast_layman"], color='red', linestyle='--', label=f"Mittelwert Forecast ({summary['layman_mean']:.0f})")
+    ax_Mittelwert.plot(detail["week"], detail["forecast_mean_based"], color='red', linestyle='--', label=f"Mittelwert Forecast ({summary['mean_based_mean']:.0f})")
     ax_Mittelwert.set_title("Mittelwert-Vorhersage (Historischer Mittelwert) vs. Realität (Evaluation im Testjahr)")
     ax_Mittelwert.set_xlabel("Woche")
     ax_Mittelwert.set_ylabel("Nachfrage")
@@ -283,14 +283,14 @@ def _(detail, mo, pd, plt, summary):
 
     tab2_content = mo.vstack([
         mo.md("## Statische Vorhersage mittels Mittelwert\n\nEine einfache Vorhersage mittels Mittelwert ignoriert Schwankungen, ignoriert Kontextinformationen und nimmt einfach den historischen Gesamtmittelwert der Trainingsjahre (alles außer das Testjahr) als Forecast und zugleich als Bestellmenge. Wir evaluieren diesen Ansatz auf dem letzten Jahr (Testjahr)."),
-        mo.md(f"**Geschätzter Mittelwert:** `{summary['layman_mean']:.0f}`"),
+        mo.md(f"**Geschätzter Mittelwert:** `{summary['mean_based_mean']:.0f}`"),
         fig_Mittelwert,
         pd.DataFrame({
             "Metrik": ["MAE", "RMSE", "Mittlere Wochenkosten"],
             "Mittelwert": [
-                summary["mae_layman"], 
-                summary["rmse_layman"], 
-                f"{summary['avg_weekly_cost_layman_point']:.2f} €"
+                summary["mae_mean_based"], 
+                summary["rmse_mean_based"], 
+                f"{summary['avg_weekly_cost_mean_based_point']:.2f} €"
             ]
         })
     ])
@@ -357,7 +357,7 @@ def _(detail, mo, pd, plt, summary):
     # Berechnung des Metrik-DataFrames mit Rundung
     metrics_df = pd.DataFrame({
         "Metrik": ["MAE", "RMSE"],
-        "Mittelwert": [summary["mae_layman"], summary["rmse_layman"]],
+        "Mittelwert": [summary["mae_mean_based"], summary["rmse_mean_based"]],
         "XGBoost": [summary["mae_xgb"], summary["rmse_xgb"]]
     }).set_index("Metrik").round(2)
 
@@ -380,7 +380,7 @@ def _(tab3_content):
 def _(detail, mo, pd, plt, summary):
     fig_eval1_xgb, ax_eval1_xgb = plt.subplots(figsize=(11, 4))
     ax_eval1_xgb.plot(detail["week"], detail["demand"], label="Realisierte Nachfrage", linewidth=2, color='black')
-    ax_eval1_xgb.plot(detail["week"], detail["q_layman"], label="Mittelwert-Bestellmenge", alpha=0.85)
+    ax_eval1_xgb.plot(detail["week"], detail["q_mean_based"], label="Mittelwert-Bestellmenge", alpha=0.85)
     ax_eval1_xgb.plot(detail["week"], detail["q_xgb"], label="XGBoost-Bestellmenge", alpha=0.85)
     ax_eval1_xgb.set_xlabel("Woche")
     ax_eval1_xgb.set_ylabel("Menge")
@@ -389,7 +389,7 @@ def _(detail, mo, pd, plt, summary):
     ax_eval1_xgb.grid(alpha=0.25)
 
     fig_eval2_xgb, ax_eval2_xgb = plt.subplots(figsize=(11, 4))
-    ax_eval2_xgb.plot(detail["week"], detail["cum_cost_layman"], label="Mittelwert Strategie", linewidth=2)
+    ax_eval2_xgb.plot(detail["week"], detail["cum_cost_mean_based"], label="Mittelwert Strategie", linewidth=2)
     ax_eval2_xgb.plot(detail["week"], detail["cum_cost_xgb"], label="XGBoost Strategie", linewidth=2)
     ax_eval2_xgb.set_xlabel("Woche")
     ax_eval2_xgb.set_ylabel("Kumulierte Kosten")
@@ -399,12 +399,12 @@ def _(detail, mo, pd, plt, summary):
 
     decision_table_xgb = pd.DataFrame({
         "Strategie": ["Mittelwert (Naive)", "XGBoost (ML)"],
-        "Jahreskosten": [f"{summary['annual_cost_layman_point']:.2f} €", f"{summary['annual_cost_xgb_point']:.2f} €"],
-        "Ø Wochenkosten": [f"{summary['avg_weekly_cost_layman_point']:.2f} €", f"{summary['avg_weekly_cost_xgb_point']:.2f} €"],
+        "Jahreskosten": [f"{summary['annual_cost_mean_based_point']:.2f} €", f"{summary['annual_cost_xgb_point']:.2f} €"],
+        "Ø Wochenkosten": [f"{summary['avg_weekly_cost_mean_based_point']:.2f} €", f"{summary['avg_weekly_cost_xgb_point']:.2f} €"],
     })
 
-    better_forecast_xgb = summary["mae_xgb"] < summary["mae_layman"]
-    better_decision_xgb = summary["annual_cost_xgb_point"] < summary["annual_cost_layman_point"]
+    better_forecast_xgb = summary["mae_xgb"] < summary["mae_mean_based"]
+    better_decision_xgb = summary["annual_cost_xgb_point"] < summary["annual_cost_mean_based_point"]
 
     tab3b_content = mo.vstack([
         mo.md("## Entscheidungs-Evaluation: Mittelwert vs. ML-Modell\n\nFührt das bessere Machine-Learning-Vorhersagemodell automatisch zu besseren Entscheidungen und geringeren Kosten? Wir vergleichen die Kosten der Bestellentscheidungen über das Testjahr."),
@@ -497,7 +497,7 @@ def _(tab3d_content):
 def _(detail, mo, pd, plt, summary):
     fig_eval1, ax_eval1 = plt.subplots(figsize=(11, 4))
     ax_eval1.plot(detail["week"], detail["demand"], label="Realisierte Nachfrage", linewidth=2, color='black')
-    ax_eval1.plot(detail["week"], detail["q_layman"], label="Mittelwert-Bestellmenge", alpha=0.85)
+    ax_eval1.plot(detail["week"], detail["q_mean_based"], label="Mittelwert-Bestellmenge", alpha=0.85)
     ax_eval1.plot(detail["week"], detail["q_xgb"], label="XGBoost-Bestellmenge", alpha=0.85)
     ax_eval1.plot(detail["week"], detail["q_ngb"], label="NGBoost-Bestellmenge", alpha=0.85)
     ax_eval1.set_xlabel("Woche")
@@ -507,7 +507,7 @@ def _(detail, mo, pd, plt, summary):
     ax_eval1.grid(alpha=0.25)
 
     fig_eval2, ax_eval2 = plt.subplots(figsize=(11, 4))
-    ax_eval2.plot(detail["week"], detail["cum_cost_layman"], label="Mittelwert point", linewidth=2)
+    ax_eval2.plot(detail["week"], detail["cum_cost_mean_based"], label="Mittelwert point", linewidth=2)
     ax_eval2.plot(detail["week"], detail["cum_cost_xgb"], label="XGBoost point", linewidth=2)
     ax_eval2.plot(detail["week"], detail["cum_cost_ngb"], label="NGBoost probabilistic", linewidth=2)
     ax_eval2.set_xlabel("Woche")
@@ -518,12 +518,12 @@ def _(detail, mo, pd, plt, summary):
 
     decision_table = pd.DataFrame({
         "Policy": ["Mittelwert point", "XGBoost point", "NGBoost probabilistic"],
-        "Jahreskosten": [summary["annual_cost_layman_point"], summary["annual_cost_xgb_point"], summary["annual_cost_ngb_prob"]],
-        "Ø Wochenkosten": [summary["avg_weekly_cost_layman_point"], summary["avg_weekly_cost_xgb_point"], summary["avg_weekly_cost_ngb_prob"]],
+        "Jahreskosten": [summary["annual_cost_mean_based_point"], summary["annual_cost_xgb_point"], summary["annual_cost_ngb_prob"]],
+        "Ø Wochenkosten": [summary["avg_weekly_cost_mean_based_point"], summary["avg_weekly_cost_xgb_point"], summary["avg_weekly_cost_ngb_prob"]],
     })
 
-    better_forecast = summary["mae_xgb"] < summary["mae_layman"]
-    better_decision = summary["annual_cost_xgb_point"] < summary["annual_cost_layman_point"]
+    better_forecast = summary["mae_xgb"] < summary["mae_mean_based"]
+    better_decision = summary["annual_cost_xgb_point"] < summary["annual_cost_mean_based_point"]
     ngb_beats_xgb = summary["annual_cost_ngb_prob"] < summary["annual_cost_xgb_point"]
 
     tab4_content = mo.vstack([
@@ -577,19 +577,19 @@ def _(mo, pd, summary_longterm):
     decision_table_longterm = pd.DataFrame({
         "Policy": ["Mittelwert", "XGBoost Punktschätzer", "NGBoost Probabilistisch"],
         "Ø Jahreskosten (10 J. Test)": [
-            f"{summary_longterm['annual_cost_layman_point']:.2f} €",
+            f"{summary_longterm['annual_cost_mean_based_point']:.2f} €",
             f"{summary_longterm['annual_cost_xgb_point']:.2f} €",
             f"{summary_longterm['annual_cost_ngb_prob']:.2f} €"
         ],
         "Ø Wochenkosten (10 J. Test)": [
-            f"{summary_longterm['avg_weekly_cost_layman_point']:.2f} €",
+            f"{summary_longterm['avg_weekly_cost_mean_based_point']:.2f} €",
             f"{summary_longterm['avg_weekly_cost_xgb_point']:.2f} €",
             f"{summary_longterm['avg_weekly_cost_ngb_prob']:.2f} €"
         ],
     })
 
-    better_forecast_longterm = summary_longterm["mae_xgb"] < summary_longterm["mae_layman"]
-    better_decision_longterm = summary_longterm["annual_cost_xgb_point"] < summary_longterm["annual_cost_layman_point"]
+    better_forecast_longterm = summary_longterm["mae_xgb"] < summary_longterm["mae_mean_based"]
+    better_decision_longterm = summary_longterm["annual_cost_xgb_point"] < summary_longterm["annual_cost_mean_based_point"]
     ngb_beats_xgb_longterm = summary_longterm["annual_cost_ngb_prob"] < summary_longterm["annual_cost_xgb_point"]
 
     tab4b_content = mo.vstack([
@@ -616,8 +616,8 @@ def _(tab4b_content):
 
 @app.cell
 def _(detail, mo):
-    better_layman_weeks = detail[detail["cost_layman"] < detail["cost_xgb"]]
-    default_week = int(better_layman_weeks.iloc[0]["week"]) if not better_layman_weeks.empty else 1
+    better_mean_based_weeks = detail[detail["cost_mean_based"] < detail["cost_xgb"]]
+    default_week = int(better_mean_based_weeks.iloc[0]["week"]) if not better_mean_based_weeks.empty else 1
 
     week_selector = mo.ui.dropdown(
         options={f"Woche {w}": w for w in detail["week"]},
@@ -645,19 +645,19 @@ def _(
 
     costs = NewsvendorCosts(float(overage_cost.value), float(underage_cost.value))
 
-    q_layman = row["q_layman"]
+    q_mean_based = row["q_mean_based"]
     q_xgb = row["q_xgb"]
     q_ngb = row["q_ngb"]
 
     true_samples = simulate_true_demand_for_week_context(row, n_samples=10000, seed=42)
 
-    true_cost_layman = newsvendor_cost(q_layman, true_samples, costs).mean()
+    true_cost_mean_based = newsvendor_cost(q_mean_based, true_samples, costs).mean()
     true_cost_xgb = newsvendor_cost(q_xgb, true_samples, costs).mean()
     true_cost_ngb = newsvendor_cost(q_ngb, true_samples, costs).mean()
 
     fig_single, ax_single = plt.subplots(figsize=(9, 4))
     ax_single.hist(true_samples, bins=range(200), alpha=0.5, color='gray', density=True, label="Wahre Verteilung (10k Samples)")
-    ax_single.axvline(q_layman, color='blue', linestyle='--', label=f"Mittelwert (q={q_layman:.0f})")
+    ax_single.axvline(q_mean_based, color='blue', linestyle='--', label=f"Mittelwert (q={q_mean_based:.0f})")
     ax_single.axvline(q_xgb, color='orange', linestyle='--', label=f"XGBoost (q={q_xgb:.0f})")
     ax_single.axvline(q_ngb, color='green', linestyle='--', label=f"NGBoost (q={q_ngb:.0f})")
     ax_single.set_xlabel("Nachfrage")
@@ -668,9 +668,9 @@ def _(
 
     eval_table = pd.DataFrame({
         "Policy": ["Mittelwert", "XGBoost", "NGBoost"],
-        "Bestellmenge": [q_layman, q_xgb, q_ngb],
-        "Tatsächliche Kosten (im Backtest)": [f"{row['cost_layman']:.2f} €", f"{row['cost_xgb']:.2f} €", f"{row['cost_ngb']:.2f} €"],
-        "Wahre erwartete Kosten": [f"{true_cost_layman:.2f} €", f"{true_cost_xgb:.2f} €", f"{true_cost_ngb:.2f} €"]
+        "Bestellmenge": [q_mean_based, q_xgb, q_ngb],
+        "Tatsächliche Kosten (im Backtest)": [f"{row['cost_mean_based']:.2f} €", f"{row['cost_xgb']:.2f} €", f"{row['cost_ngb']:.2f} €"],
+        "Wahre erwartete Kosten": [f"{true_cost_mean_based:.2f} €", f"{true_cost_xgb:.2f} €", f"{true_cost_ngb:.2f} €"]
     })
 
     tab5_content = mo.vstack([

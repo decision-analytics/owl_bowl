@@ -9,10 +9,10 @@ from ngboost.distns import Normal
 
 from src.data import FEATURES
 
-def fit_layman_mean(train: pd.DataFrame) -> float:
+def fit_mean_based_mean(train: pd.DataFrame) -> float:
     return float(train["demand"].mean())
 
-def predict_layman_mean(mean_value: float, n: int) -> np.ndarray:
+def predict_mean_based_mean(mean_value: float, n: int) -> np.ndarray:
     return np.full(n, mean_value, dtype=float)
 
 def fit_xgb_point_model(train: pd.DataFrame):
