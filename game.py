@@ -8,9 +8,67 @@ def _():
     import marimo as mo
     import pandas as pd
     import numpy as np
-    from src.data import simulate_history
-    from src.costs import newsvendor_cost, NewsvendorCosts
-    return mo, pd, np, simulate_history, newsvendor_cost, NewsvendorCosts
+
+    def simulate_history(n_years: int = 8, seed: int = 42, include_spikes: bool = True) -> pd.DataFrame:
+        rng = np.random.default_rng(seed)
+        rows = []
+
+        for year in range(1, n_years + 1):
+            for week in range(1, 53):
+                theta = 2 * np.pi * (week - 1) / 52.0
+
+                # Beobachtbare Kontextinformationen
+                temp = 11 + 12 * np.sin(theta - 0.9) + rng.normal(0, 3.0)
+                holiday = int((week in [1, 2, 31, 32, 33, 52]))
+                rain = rng.binomial(1, 0.35 - 0.10 * np.sin(theta - 0.7))
+
+                # Lokales Event: im Sommer etwas wahrscheinlicher
+                p_event = 0.04 + 0.10 * max(0.0, np.sin(theta - 0.2))
+                event = rng.binomial(1, min(max(p_event, 0.0), 0.5))
+
+                # Struktureller Teil der Nachfrage
+                log_location = (
+                    4.15
+                    + 0.12 * np.sin(theta - 0.5)
+                    + 0.08 * np.cos(theta)
+                    + 0.015 * temp
+                    + 0.18 * event
+                    - 0.14 * holiday
+                    - 0.08 * rain
+                )
+
+                # Aleatorische Restunsicherheit
+                sigma = 0.25 + 0.03 * (temp > 20) + 0.05 * event
+                eps = rng.normal(0.0, sigma)
+
+                # Seltene positive Nachfragespitzen
+                if include_spikes:
+                    spike_prob = 0.03 + 0.05 * event + 0.02 * (temp > 24)
+                    spike = rng.exponential(scale=0.55) if rng.random() < spike_prob else 0.0
+                else:
+                    spike = 0.0
+
+                log_demand = log_location + eps + spike
+                demand = int(np.round(np.exp(log_demand)))
+                demand = max(demand, 0)
+
+                rows.append(
+                    {
+                        "year": year,
+                        "week": week,
+                        "week_sin": np.sin(theta),
+                        "week_cos": np.cos(theta),
+                        "temp": temp,
+                        "holiday": holiday,
+                        "rain": rain,
+                        "event": event,
+                        "demand": demand,
+                    }
+                )
+
+        return pd.DataFrame(rows)
+
+    return mo, pd, np, simulate_history
 
 
 @app.cell
@@ -35,12 +93,10 @@ def _(mo):
 
 @app.cell
 def _(
-    NewsvendorCosts,
     game_seed,
     get_game_state,
     include_spikes,
     mo,
-    newsvendor_cost,
     set_game_state,
     simulate_history,
 ):
@@ -77,11 +133,7 @@ def _(
         row_play = df_play.iloc[week_idx]
         sub_d = row_play["demand"]
         
-        costs_obj = NewsvendorCosts(overage_cost=1.0, underage_cost=5.5)
-        cost_val = float(newsvendor_cost(sub_q, sub_d, costs_obj))
-        
-        # Profit = 8.50 * min(q, d) - 3.00 * q + 2.00 * max(0, q - d)
-        profit_val = 8.50 * min(sub_q, sub_d) - 3.00 * sub_q + 2.00 * max(0, sub_q - sub_d)
+        profit_val = 10.00 * min(sub_q, sub_d) - 3.00 * sub_q + 2.50 * max(0, sub_q - sub_d)
         
         sub_result = {
             "Woche": week_idx + 1,
@@ -91,8 +143,7 @@ def _(
             "Ferien": "Ja" if row_play['holiday'] else "Nein",
             "Bestellmenge": int(sub_q),
             "Nachfrage": int(sub_d),
-            "Kosten (€)": float(cost_val),
-            "Profit (€)": float(profit_val)
+            "Gewinn (€)": float(profit_val)
         }
         
         new_history = curr["history"] + [sub_result]
@@ -153,8 +204,7 @@ def _(
         history_df = pd.DataFrame(curr_state["history"])
         display_df = history_df.copy()
         display_df["Temperatur"] = display_df["Temperatur"].apply(lambda t: f"{t:.1f} °C")
-        display_df["Kosten (€)"] = display_df["Kosten (€)"].apply(lambda c: f"{c:.2f} €")
-        display_df["Profit (€)"] = display_df["Profit (€)"].apply(lambda p: f"{p:.2f} €")
+        display_df["Gewinn (€)"] = display_df["Gewinn (€)"].apply(lambda p: f"{p:.2f} €")
         
         history_table = mo.vstack([
             mo.md("---"),
@@ -164,18 +214,17 @@ def _(
     
     if curr_state["phase"] == "start":
         game_ui = mo.vstack([
-            mo.md("## Das OWL-Bowl Newsvendor Spiel\n\nStellen Sie sich vor, Sie betreiben einen Food-Truck auf dem Wochenmarkt in Ostwestfalen-Lippe. Sie verkaufen jeden Samstag eine begehrte regionale **'OWL-Bowl'**.\n\n"
-                  "**Die harten Fakten:**\n"
+            mo.md("## Das OWL-Bowl Spiel\n\nStellen Sie sich vor, Sie betreiben einen Food-Truck auf dem Wochenmarkt in Ostwestfalen-Lippe. Sie verkaufen jeden Samstag eine begehrte regionale **'OWL-Bowl'**.\n\n"
+                  "**Die Fakten:**\n"
                   "- **Materialkosten:** 3.00 € pro Bowl\n"
-                  "- **Verkaufspreis:** 8.50 € pro Bowl\n"
-                  "- **Restwert:** 2.00 € (Einige Zutaten können am nächsten Tag weiterverwendet werden)\n\n"
+                  "- **Verkaufspreis:** 10.00 € pro Bowl\n"
+                  "- **Restwert:** 2.50 € (Einige Zutaten können am nächsten Tag weiterverwendet werden)\n\n"
                   "**Ihre resultierende Kostenstruktur:**\n"
-                  "- Kosten bei Überbestand: **1.00 €** (3.00€ - 2.00€)\n"
-                  "- Entgangener Gewinn bei Unterbestand: **5.50 €** (8.50€ - 3.00€)\n\n"
-                  "Spielen Sie 10 Wochen durch. Vor jeder Woche sehen Sie die Wetterprognose und ob ein lokales Event ansteht. Versuchen Sie, die Gesamtkosten so gering wie möglich zu halten!"
+                  "- Kosten bei Überbestand: **0.50 €** (3.00€ - 2.50€)\n"
+                  "- Entgangener Gewinn bei Unterbestand: **7.00 €** (10.00€ - 3.00€)\n\n"
+                  "Spielen Sie 10 Wochen durch. Vor jeder Woche sehen Sie die Wetterprognose und ob ein lokales Event ansteht. Versuchen Sie, den Gesamtgewinn so hoch wie möglich zu halten!"
                  ),
             mo.md("---"),
-            mo.md("### Spielmodus einstellen:"),
             spikes_switch,
             seed_input,
             mo.md("---"),
@@ -207,41 +256,43 @@ def _(
         
         q = res["Bestellmenge"]
         d = res["Nachfrage"]
-        cost = res["Kosten (€)"]
-        profit = res["Profit (€)"]
+        profit = res["Gewinn (€)"]
         
         if q > d:
             calc_text = (
                 f"**Überbestand:** Sie haben **{q}** Bowls vorbereitet, aber die Nachfrage lag nur bei **{d}**.\n"
                 f"- **{q - d} Bowls** wurden nicht verkauft.\n"
-                f"- Kosten pro übrig gebliebener Bowl: **1.00 €** (Material 3.00€ - Restwert 2.00€).\n"
-                f"- **Berechnung:** {q - d} * 1.00 € = **{cost:.2f} €** Kosten.\n"
-                f"- **Profit:** 8.50€ * {d} (Umsatz) - 3.00€ * {q} (Kosten) + 2.00€ * {q-d} (Restwert) = **{profit:.2f} €**."
+                f"- Kosten pro übrig gebliebener Bowl: **0.50 €** (Material 3.00€ - Restwert 2.50€).\n"
+                f"- **Umsatz:** 10.00€ * {d} = **{10.00*d:.2f} €**.\n"
+                f"- **Materialkosten:** 3.00€ * {q} = **{3.00*q:.2f} €**.\n"
+                f"- **Restwert:** 2.50€ * {q-d} = **{2.50*(q-d):.2f} €**.\n"
+                f"- **Gewinn:** 10.00€ * {d} (Umsatz) - 3.00€ * {q} (Kosten) + 2.50€ * {q-d} (Restwert) = **{profit:.2f} €**."
             )
         elif q < d:
             calc_text = (
                 f"**Unterbestand:** Sie haben **{q}** Bowls vorbereitet bei einer Nachfrage von **{d}**.\n"
                 f"- **{d - q} Kunden** konnten nicht bedient werden.\n"
-                f"- Entgangener Gewinn pro nicht verkaufter Bowl: **5.50 €** (Verkauf 8.50€ - Material 3.00€).\n"
-                f"- **Berechnung:** {d - q} * 5.50 € = **{cost:.2f} €** Kosten.\n"
-                f"- **Profit:** 8.50€ * {q} (Umsatz) - 3.00€ * {q} (Kosten) = **{profit:.2f} €**."
+                f"- Entgangener Gewinn pro nicht verkaufter Bowl: **7.00 €** (Verkauf 10.00€ - Material 3.00€).\n"
+                f"- **Umsatz:** 10.00€ * {q} = **{10.00*q:.2f} €**.\n"
+                f"- **Materialkosten:** 3.00€ * {q} = **{3.00*q:.2f} €**.\n"
+                f"- **Gewinn:** 10.00€ * {q} (Umsatz) - 3.00€ * {q} (Kosten) = **{profit:.2f} €**."
             )
         else:
             calc_text = (
                 f"**Perfekte Punktlandung!** Sie haben exakt **{q}** Bowls vorbereitet und alle **{d}** Bowls verkauft.\n"
-                f"- Keine zusätzlichen Kosten: **0.00 €**.\n"
-                f"- **Profit:** 8.50€ * {q} (Umsatz) - 3.00€ * {q} (Kosten) = **{profit:.2f} €**."
+                f"- **Umsatz:** 10.00€ * {q} = **{10.00*q:.2f} €**.\n"
+                f"- **Materialkosten:** 3.00€ * {q} = **{3.00*q:.2f} €**.\n"
+                f"- **Gewinn:** 10.00€ * {q} (Umsatz) - 3.00€ * {q} (Kosten) = **{profit:.2f} €**."
             )
         
         game_ui = mo.vstack([
             mo.md(f"## Ergebnis für Woche {res['Woche']}"),
             mo.md(f"- Ihre Bestellmenge: **{q}**\n"
                   f"- Tatsächliche Nachfrage: **{d}**\n"
-                  f"### Entstandene Kosten: {cost:.2f} €\n"
-                  f"### Erzielter Profit: {profit:.2f} €"
+                  f"### Erzielter Gewinn: {profit:.2f} €"
                  ),
             mo.md("---"),
-            mo.md("### Kosten- und Profit-Berechnung:"),
+            mo.md("### Gewinn-Berechnung:"),
             mo.md(calc_text),
             mo.md(""),
             next_btn,
@@ -250,14 +301,11 @@ def _(
         
     elif curr_state["phase"] == "end":
         history_df = pd.DataFrame(curr_state["history"])
-        total_costs = history_df["Kosten (€)"].sum()
-        total_profit = history_df["Profit (€)"].sum()
+        total_profit = history_df["Gewinn (€)"].sum()
         
         game_ui = mo.vstack([
             mo.md("## Spielende!"),
-            mo.md(f"Ihre Gesamtkosten über 10 Wochen: **{total_costs:.2f} €**\n\n"
-                  f"Ihr erzielter Gesamtprofit: **{total_profit:.2f} €**"
-                 ),
+            mo.md(f"Ihr erzielter Gesamtgewinn: **{total_profit:.2f} €**"),
             history_table,
             mo.md(""),
             restart_btn

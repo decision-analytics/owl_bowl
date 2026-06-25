@@ -6,7 +6,7 @@ import pandas as pd
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 from src.data import FEATURES, split_train_test, simulate_history
-from src.costs import NewsvendorCosts, newsvendor_cost
+from src.costs import NewsvendorCosts, newsvendor_cost, newsvendor_profit
 from src.models import (
     fit_mean_based_mean,
     predict_mean_based_mean,
@@ -17,11 +17,11 @@ from src.models import (
 from src.decision import clip_round_positive, choose_quantity_by_quantile_grid
 
 
-def run_backtest_one_world(
+def run_backtest_historical_data(
     n_years: int = 8,
     seed: int = 42,
-    overage_cost: float = 1.5,
-    underage_cost: float = 9.0,
+    overage_cost: float = 0.5,
+    underage_cost: float = 7.0,
     n_samples_ngb: int = 1500,
     tau_low: float = 0.50,
     tau_high: float = 0.99,
@@ -61,8 +61,8 @@ def run_backtest_one_world(
     q_mean_based = clip_round_positive(forecast_mean_based)
     q_xgb = clip_round_positive(forecast_xgb)
 
-    cost_mean_based = newsvendor_cost(q_mean_based, y_test, costs)
-    cost_xgb = newsvendor_cost(q_xgb, y_test, costs)
+    profit_mean_based = newsvendor_profit(q_mean_based, y_test, costs)
+    profit_xgb = newsvendor_profit(q_xgb, y_test, costs)
 
     # Phase 4: NGBoost probabilistisch + brute-force Quantilgitter (vektorisiert für maximale Performance)
     ngb_model = fit_ngboost_model(train)
@@ -76,7 +76,7 @@ def run_backtest_one_world(
     # 2. Vektorisierte Quantil-Berechnung über alle Wochen und Quantile (M, W)
     q_taus = np.round(np.quantile(samples_matrix, tau_grid, axis=0)).astype(int)
 
-    # 3. Vektorisierte Kosten-Berechnung per 3D Broadcasting
+    # 3. Vektorisierte Kosten- und Gewinn-Berechnung per 3D Broadcasting
     # q_taus_3d Shape: (M, 1, W)
     # samples_3d Shape: (1, n_samples_ngb, W)
     q_taus_3d = q_taus[:, np.newaxis, :]
@@ -85,24 +85,25 @@ def run_backtest_one_world(
     over = np.maximum(q_taus_3d - samples_3d, 0)
     under = np.maximum(samples_3d - q_taus_3d, 0)
     cost_matrix = costs.overage_cost * over + costs.underage_cost * under  # Shape: (M, n_samples_ngb, W)
-    avg_costs = cost_matrix.mean(axis=1)  # Shape: (M, W)
+    profit_matrix = costs.underage_cost * samples_3d - cost_matrix  # Shape: (M, n_samples_ngb, W)
+    avg_profits = profit_matrix.mean(axis=1)  # Shape: (M, W)
 
     # 4. Beste Entscheidung für jede Woche ermitteln
-    best_indices = np.argmin(avg_costs, axis=0)  # Shape: (W,)
+    best_indices = np.argmax(avg_profits, axis=0)  # Shape: (W,)
     
     q_ngb = q_taus[best_indices, np.arange(W)]
     tau_ngb = tau_grid[best_indices]
-    expected_cost_ngb = avg_costs[best_indices, np.arange(W)]
+    expected_profit_ngb = avg_profits[best_indices, np.arange(W)]
     demand_mean_ngb = samples_matrix.mean(axis=0)
 
     # 5. Beispiel-Scantabelle für die erste Woche (w = 0) konstruieren
     q_scan_example = pd.DataFrame({
         "tau": tau_grid,
         "q": q_taus[:, 0],
-        "avg_cost": avg_costs[:, 0]
-    }).sort_values(["avg_cost", "tau"], ascending=[True, True]).reset_index(drop=True)
+        "avg_profit": avg_profits[:, 0]
+    }).sort_values(["avg_profit", "tau"], ascending=[False, True]).reset_index(drop=True)
 
-    cost_ngb = newsvendor_cost(q_ngb, y_test, costs)
+    profit_ngb = newsvendor_profit(q_ngb, y_test, costs)
 
     detail = test.copy()
     detail["forecast_mean_based"] = forecast_mean_based
@@ -112,17 +113,17 @@ def run_backtest_one_world(
     detail["q_xgb"] = q_xgb
     detail["q_ngb"] = q_ngb
     detail["tau_ngb"] = tau_ngb
-    detail["expected_cost_ngb"] = expected_cost_ngb
-    detail["cost_mean_based"] = cost_mean_based
-    detail["cost_xgb"] = cost_xgb
-    detail["cost_ngb"] = cost_ngb
-    detail["cum_cost_mean_based"] = detail["cost_mean_based"].cumsum()
-    detail["cum_cost_xgb"] = detail["cost_xgb"].cumsum()
-    detail["cum_cost_ngb"] = detail["cost_ngb"].cumsum()
+    detail["expected_gewinn_ngb"] = expected_profit_ngb
+    detail["gewinn_mean_based"] = profit_mean_based
+    detail["gewinn_xgb"] = profit_xgb
+    detail["gewinn_ngb"] = profit_ngb
+    detail["cum_gewinn_mean_based"] = detail["gewinn_mean_based"].cumsum()
+    detail["cum_gewinn_xgb"] = detail["gewinn_xgb"].cumsum()
+    detail["cum_gewinn_ngb"] = detail["gewinn_ngb"].cumsum()
 
     q_scan_all_weeks = pd.DataFrame({
         "tau": tau_grid,
-        "avg_cost": avg_costs.mean(axis=1)
+        "avg_profit": avg_profits.mean(axis=1)
     }).sort_values("tau").reset_index(drop=True)
 
     summary = pd.Series(
@@ -135,12 +136,12 @@ def run_backtest_one_world(
             "mae_xgb": float(mae_xgb),
             "rmse_mean_based": float(rmse_mean_based),
             "rmse_xgb": float(rmse_xgb),
-            "annual_cost_mean_based_point": float(cost_mean_based.sum() / n_test_years),
-            "annual_cost_xgb_point": float(cost_xgb.sum() / n_test_years),
-            "annual_cost_ngb_prob": float(cost_ngb.sum() / n_test_years),
-            "avg_weekly_cost_mean_based_point": float(cost_mean_based.mean()),
-            "avg_weekly_cost_xgb_point": float(cost_xgb.mean()),
-            "avg_weekly_cost_ngb_prob": float(cost_ngb.mean()),
+            "annual_profit_mean_based_point": float(profit_mean_based.sum() / n_test_years),
+            "annual_profit_xgb_point": float(profit_xgb.sum() / n_test_years),
+            "annual_profit_ngb_prob": float(profit_ngb.sum() / n_test_years),
+            "avg_weekly_profit_mean_based_point": float(profit_mean_based.mean()),
+            "avg_weekly_profit_xgb_point": float(profit_xgb.mean()),
+            "avg_weekly_profit_ngb_prob": float(profit_ngb.mean()),
         }
     )
 

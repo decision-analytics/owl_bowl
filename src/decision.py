@@ -22,13 +22,14 @@ def choose_quantity_by_quantile_grid(
     # Vectorized quantile computation
     q_taus = np.round(np.quantile(demand_samples, q=tau_grid)).astype(int)
 
-    # Vectorized cost computation
+    # Vectorized cost and profit computation
     q_taus_2d = q_taus[:, np.newaxis]
     demand_2d = demand_samples[np.newaxis, :]
     over = np.maximum(q_taus_2d - demand_2d, 0)
     under = np.maximum(demand_2d - q_taus_2d, 0)
     costs_matrix = costs.overage_cost * over + costs.underage_cost * under
-    avg_costs = costs_matrix.mean(axis=1)
+    profit_matrix = costs.underage_cost * demand_2d - costs_matrix
+    avg_profits = profit_matrix.mean(axis=1)
 
     rows = []
     for i, tau in enumerate(tau_grid):
@@ -36,14 +37,15 @@ def choose_quantity_by_quantile_grid(
             {
                 "tau": float(tau),
                 "q": int(q_taus[i]),
-                "avg_cost": float(avg_costs[i]),
+                "avg_profit": float(avg_profits[i]),
             }
         )
 
     table = (
         pd.DataFrame(rows)
-        .sort_values(["avg_cost", "tau"], ascending=[True, True])
+        .sort_values(["avg_profit", "tau"], ascending=[False, True])
         .reset_index(drop=True)
     )
     best = table.iloc[0].to_dict()
     return best, table
+

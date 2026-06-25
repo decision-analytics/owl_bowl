@@ -36,7 +36,7 @@ def simulate_history(n_years: int = 8, seed: int = 42, include_spikes: bool = Tr
             )
 
             # Aleatorische Restunsicherheit
-            sigma = 0.12 + 0.03 * (temp > 20) + 0.05 * event
+            sigma = 0.25 + 0.03 * (temp > 20) + 0.05 * event
             eps = rng.normal(0.0, sigma)
 
             # Seltene positive Nachfragespitzen
@@ -94,7 +94,7 @@ def simulate_true_demand_for_week_context(row: pd.Series, n_samples: int = 10000
         - 0.08 * rain
     )
 
-    sigma = 0.12 + 0.03 * (temp > 20) + 0.05 * event
+    sigma = 0.25 + 0.03 * (temp > 20) + 0.05 * event
     spike_prob = 0.03 + 0.05 * event + 0.02 * (temp > 24)
 
     eps = rng.normal(0.0, sigma, size=n_samples)
