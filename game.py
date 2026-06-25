@@ -119,7 +119,7 @@ def _(
         
     start_btn = mo.ui.button(label="Spiel starten", on_click=on_start_click, kind="success")
     
-    q_input = mo.ui.number(value=50, step=1, label="Ihre Bestellmenge für diese Woche:")
+    q_input = mo.ui.number(value=50, step=1, label="Bestellmenge:")
     
     def on_submit(*args):
         curr = get_game_state()
@@ -225,9 +225,6 @@ def _(
                   "Spielen Sie 10 Wochen durch. Vor jeder Woche sehen Sie die Wetterprognose und ob ein lokales Event ansteht. Versuchen Sie, den Gesamtgewinn so hoch wie möglich zu halten!"
                  ),
             mo.md("---"),
-            spikes_switch,
-            seed_input,
-            mo.md("---"),
             start_btn
         ])
         
@@ -236,17 +233,23 @@ def _(
         df_play = curr_state["df"]
         row_play = df_play.iloc[week_idx]
         
+        weather_stats = mo.Html(f"""
+        <div class="scroll-container">
+            <div class="stat-card"><strong>Temp:</strong> {row_play['temp']:.1f} °C</div>
+            <div class="stat-card"><strong>Regen:</strong> {'Ja' if row_play['rain'] else 'Nein'}</div>
+            <div class="stat-card"><strong>Event:</strong> {'Ja' if row_play['event'] else 'Nein'}</div>
+            <div class="stat-card"><strong>Ferien:</strong> {'Ja' if row_play['holiday'] else 'Nein'}</div>
+        </div>
+        """)
+        
+        input_row = mo.hstack([q_input, submit_btn], align="end", gap=1)
+        
         game_ui = mo.vstack([
             mo.md(f"## Woche {week_idx + 1} von 10"),
-            mo.md(f"**Wettervorhersage & Kontext:**\n"
-                  f"- Temperatur: **{row_play['temp']:.1f} °C**\n"
-                  f"- Regen wahrscheinlich: **{'Ja' if row_play['rain'] else 'Nein'}**\n"
-                  f"- Lokales Event: **{'Ja' if row_play['event'] else 'Nein'}**\n"
-                  f"- Ferien/Feiertag: **{'Ja' if row_play['holiday'] else 'Nein'}**"
-                 ),
-            mo.md("Wie viele Bowls bereiten Sie vor?"),
-            q_input,
-            submit_btn,
+            mo.md("**Wettervorhersage & Kontext:**"),
+            weather_stats,
+            mo.md(""),
+            input_row,
             history_table if history_table is not None else mo.md("")
         ])
         
@@ -285,12 +288,17 @@ def _(
                 f"- **Gewinn:** 10.00€ * {q} (Umsatz) - 3.00€ * {q} (Kosten) = **{profit:.2f} €**."
             )
         
+        res_stats = mo.Html(f"""
+        <div class="scroll-container">
+            <div class="stat-card"><strong>Bestellt:</strong> {q}</div>
+            <div class="stat-card"><strong>Nachfrage:</strong> {d}</div>
+            <div class="stat-card" style="background: #e6fcf5; border-color: #c3fae8; color: #0ca678;"><strong>Gewinn:</strong> {profit:.2f} €</div>
+        </div>
+        """)
+        
         game_ui = mo.vstack([
             mo.md(f"## Ergebnis für Woche {res['Woche']}"),
-            mo.md(f"- Ihre Bestellmenge: **{q}**\n"
-                  f"- Tatsächliche Nachfrage: **{d}**\n"
-                  f"### Erzielter Gewinn: {profit:.2f} €"
-                 ),
+            res_stats,
             mo.md("---"),
             mo.md("### Gewinn-Berechnung:"),
             mo.md(calc_text),
@@ -316,3 +324,44 @@ def _(
 @app.cell
 def _(game_ui):
     game_ui
+
+
+@app.cell
+def _(mo):
+    style = mo.Html("""
+    <style>
+    .scroll-container {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 8px;
+        padding: 8px 0;
+        -webkit-overflow-scrolling: touch;
+    }
+    .stat-card {
+        flex: 0 0 auto;
+        background: #f1f3f5;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 14px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+    /* Prevent table text wrapping and enable horizontal scrolling */
+    table, th, td {
+        white-space: nowrap !important;
+    }
+    .marimo-table, div.table-container, table {
+        display: block !important;
+        overflow-x: auto !important;
+        max-width: 100% !important;
+    }
+    </style>
+    """)
+    return style,
+
+
+@app.cell
+def _(style):
+    style

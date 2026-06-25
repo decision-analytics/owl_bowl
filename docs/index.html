@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-CZceb_kH.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-Bam3NpBI.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-C_DwAp7Z.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-CEsLFVD9.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-D5MAsWEG.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-C6PDArdf.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        const scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          // Guard against race condition where iframe isn't ready
+          if (!obj.contentWindow?.document?.documentElement) {
+            return;
+          }
+          const element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          const hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          const newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((_entries) => {
+          setHeight();
+        });
+        // Only observe if iframe content is ready
+        if (obj.contentWindow?.document?.body) {
+          resizeObserver.observe(obj.contentWindow.document.body);
+        }
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>game</title>
+    <script type="module" crossorigin src="./assets/index-BMxMikGP.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/preload-helper-DItdS47A.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-LvLJmgfZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-Bj1aDYRI.js">
+    <link rel="modulepreload" crossorigin href="./assets/compiler-runtime-B3qBwwSJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/jsx-runtime-BqBOg78p.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEventListener-BR0C1MaI.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-YteS-k_t.js">
+    <link rel="modulepreload" crossorigin href="./assets/precisionRound-C3fmBb6j.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-B6z1Qyqt.js">
+    <link rel="modulepreload" crossorigin href="./assets/vega-loader.browser-BegSZk0G.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-CGtUbqcR.js">
+    <link rel="modulepreload" crossorigin href="./assets/clsx-Dz_KRrWq.js">
+    <link rel="modulepreload" crossorigin href="./assets/cn-DCUzRj2J.js">
+    <link rel="modulepreload" crossorigin href="./assets/badge-C7-HR1IO.js">
+    <link rel="modulepreload" crossorigin href="./assets/button-D9nb17Rw.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-dom-CSu739Rf.js">
+    <link rel="modulepreload" crossorigin href="./assets/fullscreen-BDxedMYP.js">
+    <link rel="modulepreload" crossorigin href="./assets/menu-items-CwUpDHG7.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BoOh2kN5.js">
+    <link rel="modulepreload" crossorigin href="./assets/createLucideIcon-D5guW7EU.js">
+    <link rel="modulepreload" crossorigin href="./assets/check-BH35Ndha.js">
+    <link rel="modulepreload" crossorigin href="./assets/x-C-6liIBr.js">
+    <link rel="modulepreload" crossorigin href="./assets/select-5i7URBEn.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-Gcwqb_SK.js">
+    <link rel="modulepreload" crossorigin href="./assets/use-toast-T0_cQDma.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEvent-D91BmmQi.js">
+    <link rel="modulepreload" crossorigin href="./assets/invariant-BUdrueMv.js">
+    <link rel="modulepreload" crossorigin href="./assets/isObject-DvLSfCY5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseFor-DKD1r8uL.js">
+    <link rel="modulepreload" crossorigin href="./assets/merge-_9WLTEyt.js">
+    <link rel="modulepreload" crossorigin href="./assets/zod-H_cgTO0M.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-BrXijSdZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/Deferred-DMWKlZOV.js">
+    <link rel="modulepreload" crossorigin href="./assets/uuid-DercMavo.js">
+    <link rel="modulepreload" crossorigin href="./assets/DeferredRequestRegistry-CUzZ0y7K.js">
+    <link rel="modulepreload" crossorigin href="./assets/constants-DMpttj8Q.js">
+    <link rel="modulepreload" crossorigin href="./assets/session-VtovaFBS.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-CPqw1wUv.js">
+    <link rel="modulepreload" crossorigin href="./assets/requests-DIwGYs0l.js">
+    <link rel="modulepreload" crossorigin href="./assets/useLifecycle-DieWOfXE.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNonce-DfoVjkkH.js">
+    <link rel="modulepreload" crossorigin href="./assets/useTheme-DFXuDFj9.js">
+    <link rel="modulepreload" crossorigin href="./assets/arrays-DYDL-3-i.js">
+    <link rel="modulepreload" crossorigin href="./assets/strings-md4mFbOQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/once-DRroIaBz.js">
+    <link rel="modulepreload" crossorigin href="./assets/capabilities-C_FLIcjP.js">
+    <link rel="modulepreload" crossorigin href="./assets/createReducer-1ePoj7v6.js">
+    <link rel="modulepreload" crossorigin href="./assets/paths-BXWH6vv4.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BrR4M-k3.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-HlsDto3K.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CHcznzB-.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-VjDnmGCZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-E6ttb8td.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DBiqbYe-.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DQOq2Tf-.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-B324sPca.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-C9ZB41s2.js">
+    <link rel="modulepreload" crossorigin href="./assets/stex-CtmkcLz7.js">
+    <link rel="modulepreload" crossorigin href="./assets/toDate-B5A0DFEz.js">
+    <link rel="modulepreload" crossorigin href="./assets/purify.es-DBmVz-Wl.js">
+    <link rel="modulepreload" crossorigin href="./assets/cjs-BRGiG41H.js">
+    <link rel="modulepreload" crossorigin href="./assets/isSymbol-BT6B8Bon.js">
+    <link rel="modulepreload" crossorigin href="./assets/now-CsYTPAhW.js">
+    <link rel="modulepreload" crossorigin href="./assets/debounce-DhnxH9Rh.js">
+    <link rel="modulepreload" crossorigin href="./assets/database-zap-kIkTfzTX.js">
+    <link rel="modulepreload" crossorigin href="./assets/main-B0OX4z33.js">
+    <link rel="modulepreload" crossorigin href="./assets/cells-DAxz8J5R.js">
+    <link rel="modulepreload" crossorigin href="./assets/ErrorBoundary-DzYV_VeY.js">
+    <link rel="modulepreload" crossorigin href="./assets/kbd-B3Breaz2.js">
+    <link rel="modulepreload" crossorigin href="./assets/useInstallPackage-D0NLybAx.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-dialog-BGBdrcqJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/dialog-Dj0qTFnG.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDebounce-CLMpJfhX.js">
+    <link rel="modulepreload" crossorigin href="./assets/numbers-CAW8yjzj.js">
+    <link rel="modulepreload" crossorigin href="./assets/SSRProvider-kyGHZp36.js">
+    <link rel="modulepreload" crossorigin href="./assets/context-B3MsQb-b.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNumberFormatter-DtiQW2H_.js">
+    <link rel="modulepreload" crossorigin href="./assets/usePress-CfcdTqJM.js">
+    <link rel="modulepreload" crossorigin href="./assets/input-BX98vgAu.js">
+    <link rel="modulepreload" crossorigin href="./assets/ImperativeModal-D7lQ0Q7_.js">
+    <link rel="modulepreload" crossorigin href="./assets/cell-link-CC2MiW7a.js">
+    <link rel="modulepreload" crossorigin href="./assets/multi-map-rafH3cg3.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-DvqcBMUv.js">
+    <link rel="modulepreload" crossorigin href="./assets/chevron-right-CG5QYXYk.js">
+    <link rel="modulepreload" crossorigin href="./assets/dropdown-menu-D1A3cFC8.js">
+    <link rel="modulepreload" crossorigin href="./assets/links-Dpap8NI2.js">
+    <link rel="modulepreload" crossorigin href="./assets/useRunCells-BMgfN_OV.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-BCF-tANo.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-BwrPA9zQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-icon-BYNydU7b.js">
+    <link rel="modulepreload" crossorigin href="./assets/RenderHTML-DkEHxB1r.js">
+    <link rel="modulepreload" crossorigin href="./assets/datasource-C1JWjcmE.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-DgRSUIT8.js">
+    <link rel="modulepreload" crossorigin href="./assets/sparkles-CZ5WmLPA.js">
+    <link rel="modulepreload" crossorigin href="./assets/MarimoErrorOutput-1q6qtvxi.js">
+    <link rel="modulepreload" crossorigin href="./assets/spinner-Bhir8k53.js">
+    <link rel="modulepreload" crossorigin href="./assets/html-to-image-v-_444d3.js">
+    <link rel="modulepreload" crossorigin href="./assets/focus-Crs_4nnQ.js">
+    <link rel="modulepreload" crossorigin href="./assets/useAsyncData-BFC6lWG9.js">
+    <link rel="modulepreload" crossorigin href="./assets/LazyAnyLanguageCodeMirror-BF3xpDgO.js">
+    <link rel="modulepreload" crossorigin href="./assets/micromark-factory-space-DzSMahmM.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-5FQGJX7Z-e_arGD4o.js">
+    <link rel="modulepreload" crossorigin href="./assets/markdown-renderer-CbuqHMPu.js">
+    <link rel="modulepreload" crossorigin href="./assets/command-CBCkexpx.js">
+    <link rel="modulepreload" crossorigin href="./assets/popover-UExmgBsf.js">
+    <link rel="modulepreload" crossorigin href="./assets/errors-TZBmrJmc.js">
+    <link rel="modulepreload" crossorigin href="./assets/download-CXTuIv7r.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-DPyRV1LT.js">
+    <link rel="modulepreload" crossorigin href="./assets/useIframeCapabilities-BvE4n6hj.js">
+    <link rel="modulepreload" crossorigin href="./assets/error-banner-C6aBa98y.js">
+    <link rel="modulepreload" crossorigin href="./assets/formats-Dsc8AdCp.js">
+    <link rel="modulepreload" crossorigin href="./assets/en-US-D_il4jD7.js">
+    <link rel="modulepreload" crossorigin href="./assets/isValid-C8T5uJYI.js">
+    <link rel="modulepreload" crossorigin href="./assets/dates-CAlnO9QB.js">
+    <link rel="modulepreload" crossorigin href="./assets/maps-C48Oksn0.js">
+    <link rel="modulepreload" crossorigin href="./assets/extends-B2LJnKU3.js">
+    <link rel="modulepreload" crossorigin href="./assets/emotion-is-prop-valid.esm-DD4AwVTU.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDateFormatter-CgFoBhVq.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-icons.esm-D9xfKaPZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-6NxtGaCm.js">
+    <link rel="modulepreload" crossorigin href="./assets/ellipsis-KAhMaCIV.js">
+    <link rel="modulepreload" crossorigin href="./assets/message-circle-CWm2KnSx.js">
+    <link rel="modulepreload" crossorigin href="./assets/trash-2-CKlZA04n.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-resizable-panels.browser.esm-BUNcfKXO.js">
+    <link rel="modulepreload" crossorigin href="./assets/JsonOutput-ugBhs7bt.js">
+    <link rel="modulepreload" crossorigin href="./assets/chart-no-axes-column-nqk474t8.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-function-D1dlJvD8.js">
+    <link rel="modulepreload" crossorigin href="./assets/spec-Cq8FVoTf.js">
+    <link rel="modulepreload" crossorigin href="./assets/ellipsis-vertical-CkwWkOQL.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-cw-DHwG4Mac.js">
+    <link rel="modulepreload" crossorigin href="./assets/tree-actions-Ci3CV3hN.js">
+    <link rel="modulepreload" crossorigin href="./assets/components-CZy03693.js">
+    <link rel="modulepreload" crossorigin href="./assets/column-preview-DBPye87P.js">
+    <link rel="modulepreload" crossorigin href="./assets/icons-D9TuFTJG.js">
+    <link rel="modulepreload" crossorigin href="./assets/radio-group-BI3wOhfc.js">
+    <link rel="modulepreload" crossorigin href="./assets/floating-outline-DHE0ukvC.js">
+    <link rel="modulepreload" crossorigin href="./assets/objectWithoutPropertiesLoose-DaPAPabU.js">
+    <link rel="modulepreload" crossorigin href="./assets/esm-BmrwxxCo.js">
+    <link rel="modulepreload" crossorigin href="./assets/eye-off-n1Li95bE.js">
+    <link rel="modulepreload" crossorigin href="./assets/plus-BgB18UzY.js">
+    <link rel="modulepreload" crossorigin href="./assets/readonly-python-code-CaKJ84fy.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-headphone-BrQspHac.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-BrdxGLRX.js">
+    <link rel="modulepreload" crossorigin href="./assets/image-DQHXdEQn.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-icons-5G4ZC70N.js">
+    <link rel="modulepreload" crossorigin href="./assets/switch-BvybnC9P.js">
+    <link rel="modulepreload" crossorigin href="./assets/events-BRAWQiYK.js">
+    <link rel="modulepreload" crossorigin href="./assets/globals-DUw71mRV.js">
+    <link rel="modulepreload" crossorigin href="./assets/share-DIVpiHPe.js">
+    <link rel="modulepreload" crossorigin href="./assets/blob-D-eV0cU3.js">
+    <link rel="modulepreload" crossorigin href="./assets/memoize-Tp7rARFe.js">
+    <link rel="modulepreload" crossorigin href="./assets/get-C-qh_et5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseSet-CxV9N1bc.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-CjlRDG08.js">
+    <link rel="modulepreload" crossorigin href="./assets/label-DTR8T0AE.js">
+    <link rel="modulepreload" crossorigin href="./assets/textarea-GPxmW3rS.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-ccw-C-n2VFP5.js">
+    <link rel="modulepreload" crossorigin href="./assets/form-DRJZl2zK.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderShortcut-Bfk4NjRL.js">
+    <link rel="modulepreload" crossorigin href="./assets/field-BrLPDxsA.js">
+    <link rel="modulepreload" crossorigin href="./assets/RSPContexts-CINae4Gg.js">
+    <link rel="modulepreload" crossorigin href="./assets/useBoolean-xXcxYCaI.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDeepCompareMemoize-D0WTlCXt.js">
+    <link rel="modulepreload" crossorigin href="./assets/types-W8WWuumF.js">
+    <link rel="modulepreload" crossorigin href="./assets/fileToBase64-Bzn96tYq.js">
+    <link rel="modulepreload" crossorigin href="./assets/pathUtils-DOhgNpTR.js">
+    <link rel="modulepreload" crossorigin href="./assets/prop-types-BiQYf0aU.js">
+    <link rel="modulepreload" crossorigin href="./assets/es-DaYh1PsD.js">
+    <link rel="modulepreload" crossorigin href="./assets/hasIn-DiS_ryrS.js">
+    <link rel="modulepreload" crossorigin href="./assets/flatten-Dl4V1ub3.js">
+    <link rel="modulepreload" crossorigin href="./assets/pick-DqWUNly1.js">
+    <link rel="modulepreload" crossorigin href="./assets/code-xml-CZN6vNxu.js">
+    <link rel="modulepreload" crossorigin href="./assets/house-mGK3v0Mm.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-DMaNzePN.js">
+    <link rel="modulepreload" crossorigin href="./assets/triangle-alert-B8l157gP.js">
+    <link rel="modulepreload" crossorigin href="./assets/bundle.esm-BIoPrMH_.js">
+    <link rel="stylesheet" crossorigin href="./assets/cells-jmgGt1lS.css">
+    <link rel="stylesheet" crossorigin href="./assets/markdown-renderer-DdDKmWlR.css">
+    <link rel="stylesheet" crossorigin href="./assets/JsonOutput-B7vuddcd.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-DH5UUBE4.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_EXPORT_CONTEXT__", {
+        value: Object.freeze({
+            trusted: true,
+            notebookCode: "import marimo\n\n__generated_with = \"0.23.6\"\napp = marimo.App(width=\"medium\")\n\n\n@app.cell\ndef _():\n    import marimo as mo\n    import pandas as pd\n    import numpy as np\n\n    def simulate_history(n_years: int = 8, seed: int = 42, include_spikes: bool = True) -\u003E pd.DataFrame:\n        rng = np.random.default_rng(seed)\n        rows = []\n\n        for year in range(1, n_years + 1):\n            for week in range(1, 53):\n                theta = 2 * np.pi * (week - 1) / 52.0\n\n                # Beobachtbare Kontextinformationen\n                temp = 11 + 12 * np.sin(theta - 0.9) + rng.normal(0, 3.0)\n                holiday = int((week in [1, 2, 31, 32, 33, 52]))\n                rain = rng.binomial(1, 0.35 - 0.10 * np.sin(theta - 0.7))\n\n                # Lokales Event: im Sommer etwas wahrscheinlicher\n                p_event = 0.04 + 0.10 * max(0.0, np.sin(theta - 0.2))\n                event = rng.binomial(1, min(max(p_event, 0.0), 0.5))\n\n                # Struktureller Teil der Nachfrage\n                log_location = (\n                    4.15\n                    + 0.12 * np.sin(theta - 0.5)\n                    + 0.08 * np.cos(theta)\n                    + 0.015 * temp\n                    + 0.18 * event\n                    - 0.14 * holiday\n                    - 0.08 * rain\n                )\n\n                # Aleatorische Restunsicherheit\n                sigma = 0.25 + 0.03 * (temp \u003E 20) + 0.05 * event\n                eps = rng.normal(0.0, sigma)\n\n                # Seltene positive Nachfragespitzen\n                if include_spikes:\n                    spike_prob = 0.03 + 0.05 * event + 0.02 * (temp \u003E 24)\n                    spike = rng.exponential(scale=0.55) if rng.random() \u003C spike_prob else 0.0\n                else:\n                    spike = 0.0\n\n                log_demand = log_location + eps + spike\n                demand = int(np.round(np.exp(log_demand)))\n                demand = max(demand, 0)\n\n                rows.append(\n                    {\n                        \"year\": year,\n                        \"week\": week,\n                        \"week_sin\": np.sin(theta),\n                        \"week_cos\": np.cos(theta),\n                        \"temp\": temp,\n                        \"holiday\": holiday,\n                        \"rain\": rain,\n                        \"event\": event,\n                        \"demand\": demand,\n                    }\n                )\n\n        return pd.DataFrame(rows)\n\n    return mo, pd, simulate_history\n\n\n@app.cell\ndef _(mo):\n    params = mo.query_params()\n    include_spikes = params.get(\"spikes\", \"false\").lower() in (\"true\", \"1\", \"yes\")\n    game_seed = int(params.get(\"seed\", \"42\"))\n    return game_seed, include_spikes\n\n\n@app.cell\ndef _(mo):\n    get_game_state, set_game_state = mo.state({\n        \"phase\": \"start\",\n        \"week_idx\": 0,\n        \"df\": None,\n        \"history\": [],\n        \"last_result\": None\n    })\n    return get_game_state, set_game_state\n\n\n@app.cell\ndef _(\n    game_seed,\n    get_game_state,\n    include_spikes,\n    mo,\n    set_game_state,\n    simulate_history,\n):\n    # Static UI widgets and callbacks defined ONCE.\n    # This cell does not depend on get_game_state(), so it never re-runs on state changes!\n\n    spikes_switch = mo.ui.checkbox(value=include_spikes, label=\"Seltene Nachfragespitzen (Spikes) im Spiel simulieren\")\n    seed_input = mo.ui.number(value=game_seed, step=1, label=\"Spiel-Seed (Zufallszahlen-Startwert):\")\n\n    def on_start_click(*args):\n        df_full = simulate_history(n_years=1, seed=int(seed_input.value), include_spikes=spikes_switch.value)\n        df_game = df_full.head(10).copy()\n        set_game_state({\n            \"phase\": \"play\",\n            \"week_idx\": 0,\n            \"df\": df_game,\n            \"history\": [],\n            \"last_result\": None\n        })\n\n    start_btn = mo.ui.button(label=\"Spiel starten\", on_click=on_start_click, kind=\"success\")\n\n    q_input = mo.ui.number(value=50, step=1, label=\"Bestellmenge:\")\n\n    def on_submit(*args):\n        curr = get_game_state()\n        if curr[\"phase\"] != \"play\": return\n\n        sub_q = q_input.value\n        if sub_q is None: return\n\n        week_idx = curr[\"week_idx\"]\n        df_play = curr[\"df\"]\n        row_play = df_play.iloc[week_idx]\n        sub_d = row_play[\"demand\"]\n\n        profit_val = 10.00 * min(sub_q, sub_d) - 3.00 * sub_q + 2.50 * max(0, sub_q - sub_d)\n\n        sub_result = {\n            \"Woche\": week_idx + 1,\n            \"Temperatur\": float(row_play['temp']),\n            \"Regen\": \"Ja\" if row_play['rain'] else \"Nein\",\n            \"Event\": \"Ja\" if row_play['event'] else \"Nein\",\n            \"Ferien\": \"Ja\" if row_play['holiday'] else \"Nein\",\n            \"Bestellmenge\": int(sub_q),\n            \"Nachfrage\": int(sub_d),\n            \"Gewinn (\u20ac)\": float(profit_val)\n        }\n\n        new_history = curr[\"history\"] + [sub_result]\n\n        set_game_state({\n            **curr,\n            \"phase\": \"feedback\",\n            \"history\": new_history,\n            \"last_result\": sub_result\n        })\n\n    submit_btn = mo.ui.button(label=\"Entscheidung abschicken\", on_click=on_submit, kind=\"success\")\n\n    def on_next_click(*args):\n        curr = get_game_state()\n        fb_week_idx = curr[\"week_idx\"]\n        if fb_week_idx + 1 \u003E= 10:\n            set_game_state({**curr, \"phase\": \"end\"})\n        else:\n            set_game_state({**curr, \"phase\": \"play\", \"week_idx\": fb_week_idx + 1})\n\n    next_btn = mo.ui.button(label=\"N\u00e4chste Woche\", on_click=on_next_click, kind=\"info\")\n\n    def on_restart_click(*args):\n        set_game_state({\n            \"phase\": \"start\",\n            \"week_idx\": 0,\n            \"df\": None,\n            \"history\": [],\n            \"last_result\": None\n        })\n\n    restart_btn = mo.ui.button(label=\"Neues Spiel\", on_click=on_restart_click)\n\n    return next_btn, q_input, restart_btn, start_btn, submit_btn\n\n\n@app.cell\ndef _(\n    get_game_state,\n    mo,\n    next_btn,\n    pd,\n    q_input,\n    restart_btn,\n    start_btn,\n    submit_btn,\n):\n    # Pure rendering cell. Re-runs on every state change, but only assembles the static elements.\n    curr_state = get_game_state()\n    game_ui = None\n\n    # Helper to generate history table display\n    history_table = None\n    if curr_state[\"history\"]:\n        history_df = pd.DataFrame(curr_state[\"history\"])\n        display_df = history_df.copy()\n        display_df[\"Temperatur\"] = display_df[\"Temperatur\"].apply(lambda t: f\"{t:.1f} \u00b0C\")\n        display_df[\"Gewinn (\u20ac)\"] = display_df[\"Gewinn (\u20ac)\"].apply(lambda p: f\"{p:.2f} \u20ac\")\n\n        history_table = mo.vstack([\n            mo.md(\"---\"),\n            mo.md(\"### Bisheriger Spielverlauf (Historie)\"),\n            display_df\n        ])\n\n    if curr_state[\"phase\"] == \"start\":\n        game_ui = mo.vstack([\n            mo.md(\"## Das OWL-Bowl Spiel\\n\\nStellen Sie sich vor, Sie betreiben einen Food-Truck auf dem Wochenmarkt in Ostwestfalen-Lippe. Sie verkaufen jeden Samstag eine begehrte regionale **'OWL-Bowl'**.\\n\\n\"\n                  \"**Die Fakten:**\\n\"\n                  \"- **Materialkosten:** 3.00 \u20ac pro Bowl\\n\"\n                  \"- **Verkaufspreis:** 10.00 \u20ac pro Bowl\\n\"\n                  \"- **Restwert:** 2.50 \u20ac (Einige Zutaten k\u00f6nnen am n\u00e4chsten Tag weiterverwendet werden)\\n\\n\"\n                  \"**Ihre resultierende Kostenstruktur:**\\n\"\n                  \"- Kosten bei \u00dcberbestand: **0.50 \u20ac** (3.00\u20ac - 2.50\u20ac)\\n\"\n                  \"- Entgangener Gewinn bei Unterbestand: **7.00 \u20ac** (10.00\u20ac - 3.00\u20ac)\\n\\n\"\n                  \"Spielen Sie 10 Wochen durch. Vor jeder Woche sehen Sie die Wetterprognose und ob ein lokales Event ansteht. Versuchen Sie, den Gesamtgewinn so hoch wie m\u00f6glich zu halten!\"\n                 ),\n            mo.md(\"---\"),\n            start_btn\n        ])\n\n    elif curr_state[\"phase\"] == \"play\":\n        week_idx = curr_state[\"week_idx\"]\n        df_play = curr_state[\"df\"]\n        row_play = df_play.iloc[week_idx]\n\n        weather_stats = mo.Html(f\"\"\"\n        \u003Cdiv class=\"scroll-container\"\u003E\n            \u003Cdiv class=\"stat-card\"\u003E\u003Cstrong\u003ETemp:\u003C/strong\u003E {row_play['temp']:.1f} \u00b0C\u003C/div\u003E\n            \u003Cdiv class=\"stat-card\"\u003E\u003Cstrong\u003ERegen:\u003C/strong\u003E {'Ja' if row_play['rain'] else 'Nein'}\u003C/div\u003E\n            \u003Cdiv class=\"stat-card\"\u003E\u003Cstrong\u003EEvent:\u003C/strong\u003E {'Ja' if row_play['event'] else 'Nein'}\u003C/div\u003E\n            \u003Cdiv class=\"stat-card\"\u003E\u003Cstrong\u003EFerien:\u003C/strong\u003E {'Ja' if row_play['holiday'] else 'Nein'}\u003C/div\u003E\n        \u003C/div\u003E\n        \"\"\")\n\n        input_row = mo.hstack([q_input, submit_btn], align=\"end\", gap=1)\n\n        game_ui = mo.vstack([\n            mo.md(f\"## Woche {week_idx + 1} von 10\"),\n            mo.md(\"**Wettervorhersage \u0026 Kontext:**\"),\n            weather_stats,\n            mo.md(\"\"),\n            input_row,\n            history_table if history_table is not None else mo.md(\"\")\n        ])\n\n    elif curr_state[\"phase\"] == \"feedback\":\n        res = curr_state[\"last_result\"]\n        fb_week_idx = curr_state[\"week_idx\"]\n\n        q = res[\"Bestellmenge\"]\n        d = res[\"Nachfrage\"]\n        profit = res[\"Gewinn (\u20ac)\"]\n\n        if q \u003E d:\n            calc_text = (\n                f\"**\u00dcberbestand:** Sie haben **{q}** Bowls vorbereitet, aber die Nachfrage lag nur bei **{d}**.\\n\"\n                f\"- **{q - d} Bowls** wurden nicht verkauft.\\n\"\n                f\"- Kosten pro \u00fcbrig gebliebener Bowl: **0.50 \u20ac** (Material 3.00\u20ac - Restwert 2.50\u20ac).\\n\"\n                f\"- **Umsatz:** 10.00\u20ac * {d} = **{10.00*d:.2f} \u20ac**.\\n\"\n                f\"- **Materialkosten:** 3.00\u20ac * {q} = **{3.00*q:.2f} \u20ac**.\\n\"\n                f\"- **Restwert:** 2.50\u20ac * {q-d} = **{2.50*(q-d):.2f} \u20ac**.\\n\"\n                f\"- **Gewinn:** 10.00\u20ac * {d} (Umsatz) - 3.00\u20ac * {q} (Kosten) + 2.50\u20ac * {q-d} (Restwert) = **{profit:.2f} \u20ac**.\"\n            )\n        elif q \u003C d:\n            calc_text = (\n                f\"**Unterbestand:** Sie haben **{q}** Bowls vorbereitet bei einer Nachfrage von **{d}**.\\n\"\n                f\"- **{d - q} Kunden** konnten nicht bedient werden.\\n\"\n                f\"- Entgangener Gewinn pro nicht verkaufter Bowl: **7.00 \u20ac** (Verkauf 10.00\u20ac - Material 3.00\u20ac).\\n\"\n                f\"- **Umsatz:** 10.00\u20ac * {q} = **{10.00*q:.2f} \u20ac**.\\n\"\n                f\"- **Materialkosten:** 3.00\u20ac * {q} = **{3.00*q:.2f} \u20ac**.\\n\"\n                f\"- **Gewinn:** 10.00\u20ac * {q} (Umsatz) - 3.00\u20ac * {q} (Kosten) = **{profit:.2f} \u20ac**.\"\n            )\n        else:\n            calc_text = (\n                f\"**Perfekte Punktlandung!** Sie haben exakt **{q}** Bowls vorbereitet und alle **{d}** Bowls verkauft.\\n\"\n                f\"- **Umsatz:** 10.00\u20ac * {q} = **{10.00*q:.2f} \u20ac**.\\n\"\n                f\"- **Materialkosten:** 3.00\u20ac * {q} = **{3.00*q:.2f} \u20ac**.\\n\"\n                f\"- **Gewinn:** 10.00\u20ac * {q} (Umsatz) - 3.00\u20ac * {q} (Kosten) = **{profit:.2f} \u20ac**.\"\n            )\n\n        res_stats = mo.Html(f\"\"\"\n        \u003Cdiv class=\"scroll-container\"\u003E\n            \u003Cdiv class=\"stat-card\"\u003E\u003Cstrong\u003EBestellt:\u003C/strong\u003E {q}\u003C/div\u003E\n            \u003Cdiv class=\"stat-card\"\u003E\u003Cstrong\u003ENachfrage:\u003C/strong\u003E {d}\u003C/div\u003E\n            \u003Cdiv class=\"stat-card\" style=\"background: #e6fcf5; border-color: #c3fae8; color: #0ca678;\"\u003E\u003Cstrong\u003EGewinn:\u003C/strong\u003E {profit:.2f} \u20ac\u003C/div\u003E\n        \u003C/div\u003E\n        \"\"\")\n\n        game_ui = mo.vstack([\n            mo.md(f\"## Ergebnis f\u00fcr Woche {res['Woche']}\"),\n            res_stats,\n            mo.md(\"---\"),\n            mo.md(\"### Gewinn-Berechnung:\"),\n            mo.md(calc_text),\n            mo.md(\"\"),\n            next_btn,\n            history_table if history_table is not None else mo.md(\"\")\n        ])\n\n    elif curr_state[\"phase\"] == \"end\":\n        history_df = pd.DataFrame(curr_state[\"history\"])\n        total_profit = history_df[\"Gewinn (\u20ac)\"].sum()\n\n        game_ui = mo.vstack([\n            mo.md(\"## Spielende!\"),\n            mo.md(f\"Ihr erzielter Gesamtgewinn: **{total_profit:.2f} \u20ac**\"),\n            history_table,\n            mo.md(\"\"),\n            restart_btn\n        ])\n\n    return (game_ui,)\n\n\n@app.cell\ndef _(game_ui):\n    game_ui\n    return\n\n\n@app.cell\ndef _(mo):\n    style = mo.Html(\"\"\"\n    \u003Cstyle\u003E\n    .scroll-container {\n        display: flex;\n        overflow-x: auto;\n        white-space: nowrap;\n        gap: 8px;\n        padding: 8px 0;\n        -webkit-overflow-scrolling: touch;\n    }\n    .stat-card {\n        flex: 0 0 auto;\n        background: #f1f3f5;\n        border: 1px solid #dee2e6;\n        border-radius: 6px;\n        padding: 8px 12px;\n        font-size: 14px;\n        box-shadow: 0 1px 3px rgba(0,0,0,0.05);\n        font-family: system-ui, -apple-system, sans-serif;\n    }\n    /* Prevent table text wrapping and enable horizontal scrolling */\n    table, th, td {\n        white-space: nowrap !important;\n    }\n    .marimo-table, div.table-container, table {\n        display: block !important;\n        overflow-x: auto !important;\n        max-width: 100% !important;\n    }\n    \u003C/style\u003E\n    \"\"\")\n    return (style,)\n\n\n@app.cell\ndef _(style):\n    style\n    return\n\n\nif __name__ == \"__main__\":\n    app.run()\n",
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+<marimo-code hidden="">import%20marimo%0A%0A__generated_with%20%3D%20%220.23.6%22%0Aapp%20%3D%20marimo.App(width%3D%22medium%22)%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20import%20pandas%20as%20pd%0A%20%20%20%20import%20numpy%20as%20np%0A%0A%20%20%20%20def%20simulate_history(n_years%3A%20int%20%3D%208%2C%20seed%3A%20int%20%3D%2042%2C%20include_spikes%3A%20bool%20%3D%20True)%20-%3E%20pd.DataFrame%3A%0A%20%20%20%20%20%20%20%20rng%20%3D%20np.random.default_rng(seed)%0A%20%20%20%20%20%20%20%20rows%20%3D%20%5B%5D%0A%0A%20%20%20%20%20%20%20%20for%20year%20in%20range(1%2C%20n_years%20%2B%201)%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20for%20week%20in%20range(1%2C%2053)%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20theta%20%3D%202%20*%20np.pi%20*%20(week%20-%201)%20%2F%2052.0%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20Beobachtbare%20Kontextinformationen%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20temp%20%3D%2011%20%2B%2012%20*%20np.sin(theta%20-%200.9)%20%2B%20rng.normal(0%2C%203.0)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20holiday%20%3D%20int((week%20in%20%5B1%2C%202%2C%2031%2C%2032%2C%2033%2C%2052%5D))%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20rain%20%3D%20rng.binomial(1%2C%200.35%20-%200.10%20*%20np.sin(theta%20-%200.7))%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20Lokales%20Event%3A%20im%20Sommer%20etwas%20wahrscheinlicher%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20p_event%20%3D%200.04%20%2B%200.10%20*%20max(0.0%2C%20np.sin(theta%20-%200.2))%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20event%20%3D%20rng.binomial(1%2C%20min(max(p_event%2C%200.0)%2C%200.5))%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20Struktureller%20Teil%20der%20Nachfrage%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20log_location%20%3D%20(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%204.15%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2B%200.12%20*%20np.sin(theta%20-%200.5)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2B%200.08%20*%20np.cos(theta)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2B%200.015%20*%20temp%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2B%200.18%20*%20event%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20-%200.14%20*%20holiday%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20-%200.08%20*%20rain%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20)%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20Aleatorische%20Restunsicherheit%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20sigma%20%3D%200.25%20%2B%200.03%20*%20(temp%20%3E%2020)%20%2B%200.05%20*%20event%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20eps%20%3D%20rng.normal(0.0%2C%20sigma)%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%23%20Seltene%20positive%20Nachfragespitzen%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20include_spikes%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20spike_prob%20%3D%200.03%20%2B%200.05%20*%20event%20%2B%200.02%20*%20(temp%20%3E%2024)%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20spike%20%3D%20rng.exponential(scale%3D0.55)%20if%20rng.random()%20%3C%20spike_prob%20else%200.0%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20else%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20spike%20%3D%200.0%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20log_demand%20%3D%20log_location%20%2B%20eps%20%2B%20spike%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20demand%20%3D%20int(np.round(np.exp(log_demand)))%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20demand%20%3D%20max(demand%2C%200)%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20rows.append(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22year%22%3A%20year%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22week%22%3A%20week%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22week_sin%22%3A%20np.sin(theta)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22week_cos%22%3A%20np.cos(theta)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22temp%22%3A%20temp%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22holiday%22%3A%20holiday%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22rain%22%3A%20rain%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22event%22%3A%20event%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22demand%22%3A%20demand%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20)%0A%0A%20%20%20%20%20%20%20%20return%20pd.DataFrame(rows)%0A%0A%20%20%20%20return%20mo%2C%20pd%2C%20simulate_history%0A%0A%0A%40app.cell%0Adef%20_(mo)%3A%0A%20%20%20%20params%20%3D%20mo.query_params()%0A%20%20%20%20include_spikes%20%3D%20params.get(%22spikes%22%2C%20%22false%22).lower()%20in%20(%22true%22%2C%20%221%22%2C%20%22yes%22)%0A%20%20%20%20game_seed%20%3D%20int(params.get(%22seed%22%2C%20%2242%22))%0A%20%20%20%20return%20game_seed%2C%20include_spikes%0A%0A%0A%40app.cell%0Adef%20_(mo)%3A%0A%20%20%20%20get_game_state%2C%20set_game_state%20%3D%20mo.state(%7B%0A%20%20%20%20%20%20%20%20%22phase%22%3A%20%22start%22%2C%0A%20%20%20%20%20%20%20%20%22week_idx%22%3A%200%2C%0A%20%20%20%20%20%20%20%20%22df%22%3A%20None%2C%0A%20%20%20%20%20%20%20%20%22history%22%3A%20%5B%5D%2C%0A%20%20%20%20%20%20%20%20%22last_result%22%3A%20None%0A%20%20%20%20%7D)%0A%20%20%20%20return%20get_game_state%2C%20set_game_state%0A%0A%0A%40app.cell%0Adef%20_(%0A%20%20%20%20game_seed%2C%0A%20%20%20%20get_game_state%2C%0A%20%20%20%20include_spikes%2C%0A%20%20%20%20mo%2C%0A%20%20%20%20set_game_state%2C%0A%20%20%20%20simulate_history%2C%0A)%3A%0A%20%20%20%20%23%20Static%20UI%20widgets%20and%20callbacks%20defined%20ONCE.%0A%20%20%20%20%23%20This%20cell%20does%20not%20depend%20on%20get_game_state()%2C%20so%20it%20never%20re-runs%20on%20state%20changes!%0A%0A%20%20%20%20spikes_switch%20%3D%20mo.ui.checkbox(value%3Dinclude_spikes%2C%20label%3D%22Seltene%20Nachfragespitzen%20(Spikes)%20im%20Spiel%20simulieren%22)%0A%20%20%20%20seed_input%20%3D%20mo.ui.number(value%3Dgame_seed%2C%20step%3D1%2C%20label%3D%22Spiel-Seed%20(Zufallszahlen-Startwert)%3A%22)%0A%0A%20%20%20%20def%20on_start_click(*args)%3A%0A%20%20%20%20%20%20%20%20df_full%20%3D%20simulate_history(n_years%3D1%2C%20seed%3Dint(seed_input.value)%2C%20include_spikes%3Dspikes_switch.value)%0A%20%20%20%20%20%20%20%20df_game%20%3D%20df_full.head(10).copy()%0A%20%20%20%20%20%20%20%20set_game_state(%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22phase%22%3A%20%22play%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22week_idx%22%3A%200%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22df%22%3A%20df_game%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22history%22%3A%20%5B%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22last_result%22%3A%20None%0A%20%20%20%20%20%20%20%20%7D)%0A%0A%20%20%20%20start_btn%20%3D%20mo.ui.button(label%3D%22Spiel%20starten%22%2C%20on_click%3Don_start_click%2C%20kind%3D%22success%22)%0A%0A%20%20%20%20q_input%20%3D%20mo.ui.number(value%3D50%2C%20step%3D1%2C%20label%3D%22Bestellmenge%3A%22)%0A%0A%20%20%20%20def%20on_submit(*args)%3A%0A%20%20%20%20%20%20%20%20curr%20%3D%20get_game_state()%0A%20%20%20%20%20%20%20%20if%20curr%5B%22phase%22%5D%20!%3D%20%22play%22%3A%20return%0A%0A%20%20%20%20%20%20%20%20sub_q%20%3D%20q_input.value%0A%20%20%20%20%20%20%20%20if%20sub_q%20is%20None%3A%20return%0A%0A%20%20%20%20%20%20%20%20week_idx%20%3D%20curr%5B%22week_idx%22%5D%0A%20%20%20%20%20%20%20%20df_play%20%3D%20curr%5B%22df%22%5D%0A%20%20%20%20%20%20%20%20row_play%20%3D%20df_play.iloc%5Bweek_idx%5D%0A%20%20%20%20%20%20%20%20sub_d%20%3D%20row_play%5B%22demand%22%5D%0A%0A%20%20%20%20%20%20%20%20profit_val%20%3D%2010.00%20*%20min(sub_q%2C%20sub_d)%20-%203.00%20*%20sub_q%20%2B%202.50%20*%20max(0%2C%20sub_q%20-%20sub_d)%0A%0A%20%20%20%20%20%20%20%20sub_result%20%3D%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Woche%22%3A%20week_idx%20%2B%201%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Temperatur%22%3A%20float(row_play%5B'temp'%5D)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Regen%22%3A%20%22Ja%22%20if%20row_play%5B'rain'%5D%20else%20%22Nein%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Event%22%3A%20%22Ja%22%20if%20row_play%5B'event'%5D%20else%20%22Nein%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Ferien%22%3A%20%22Ja%22%20if%20row_play%5B'holiday'%5D%20else%20%22Nein%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Bestellmenge%22%3A%20int(sub_q)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Nachfrage%22%3A%20int(sub_d)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Gewinn%20(%E2%82%AC)%22%3A%20float(profit_val)%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20new_history%20%3D%20curr%5B%22history%22%5D%20%2B%20%5Bsub_result%5D%0A%0A%20%20%20%20%20%20%20%20set_game_state(%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20**curr%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22phase%22%3A%20%22feedback%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22history%22%3A%20new_history%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22last_result%22%3A%20sub_result%0A%20%20%20%20%20%20%20%20%7D)%0A%0A%20%20%20%20submit_btn%20%3D%20mo.ui.button(label%3D%22Entscheidung%20abschicken%22%2C%20on_click%3Don_submit%2C%20kind%3D%22success%22)%0A%0A%20%20%20%20def%20on_next_click(*args)%3A%0A%20%20%20%20%20%20%20%20curr%20%3D%20get_game_state()%0A%20%20%20%20%20%20%20%20fb_week_idx%20%3D%20curr%5B%22week_idx%22%5D%0A%20%20%20%20%20%20%20%20if%20fb_week_idx%20%2B%201%20%3E%3D%2010%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20set_game_state(%7B**curr%2C%20%22phase%22%3A%20%22end%22%7D)%0A%20%20%20%20%20%20%20%20else%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20set_game_state(%7B**curr%2C%20%22phase%22%3A%20%22play%22%2C%20%22week_idx%22%3A%20fb_week_idx%20%2B%201%7D)%0A%0A%20%20%20%20next_btn%20%3D%20mo.ui.button(label%3D%22N%C3%A4chste%20Woche%22%2C%20on_click%3Don_next_click%2C%20kind%3D%22info%22)%0A%0A%20%20%20%20def%20on_restart_click(*args)%3A%0A%20%20%20%20%20%20%20%20set_game_state(%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22phase%22%3A%20%22start%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22week_idx%22%3A%200%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22df%22%3A%20None%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22history%22%3A%20%5B%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22last_result%22%3A%20None%0A%20%20%20%20%20%20%20%20%7D)%0A%0A%20%20%20%20restart_btn%20%3D%20mo.ui.button(label%3D%22Neues%20Spiel%22%2C%20on_click%3Don_restart_click)%0A%0A%20%20%20%20return%20next_btn%2C%20q_input%2C%20restart_btn%2C%20start_btn%2C%20submit_btn%0A%0A%0A%40app.cell%0Adef%20_(%0A%20%20%20%20get_game_state%2C%0A%20%20%20%20mo%2C%0A%20%20%20%20next_btn%2C%0A%20%20%20%20pd%2C%0A%20%20%20%20q_input%2C%0A%20%20%20%20restart_btn%2C%0A%20%20%20%20start_btn%2C%0A%20%20%20%20submit_btn%2C%0A)%3A%0A%20%20%20%20%23%20Pure%20rendering%20cell.%20Re-runs%20on%20every%20state%20change%2C%20but%20only%20assembles%20the%20static%20elements.%0A%20%20%20%20curr_state%20%3D%20get_game_state()%0A%20%20%20%20game_ui%20%3D%20None%0A%0A%20%20%20%20%23%20Helper%20to%20generate%20history%20table%20display%0A%20%20%20%20history_table%20%3D%20None%0A%20%20%20%20if%20curr_state%5B%22history%22%5D%3A%0A%20%20%20%20%20%20%20%20history_df%20%3D%20pd.DataFrame(curr_state%5B%22history%22%5D)%0A%20%20%20%20%20%20%20%20display_df%20%3D%20history_df.copy()%0A%20%20%20%20%20%20%20%20display_df%5B%22Temperatur%22%5D%20%3D%20display_df%5B%22Temperatur%22%5D.apply(lambda%20t%3A%20f%22%7Bt%3A.1f%7D%20%C2%B0C%22)%0A%20%20%20%20%20%20%20%20display_df%5B%22Gewinn%20(%E2%82%AC)%22%5D%20%3D%20display_df%5B%22Gewinn%20(%E2%82%AC)%22%5D.apply(lambda%20p%3A%20f%22%7Bp%3A.2f%7D%20%E2%82%AC%22)%0A%0A%20%20%20%20%20%20%20%20history_table%20%3D%20mo.vstack(%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%22---%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%22%23%23%23%20Bisheriger%20Spielverlauf%20(Historie)%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20display_df%0A%20%20%20%20%20%20%20%20%5D)%0A%0A%20%20%20%20if%20curr_state%5B%22phase%22%5D%20%3D%3D%20%22start%22%3A%0A%20%20%20%20%20%20%20%20game_ui%20%3D%20mo.vstack(%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%22%23%23%20Das%20OWL-Bowl%20Spiel%5Cn%5CnStellen%20Sie%20sich%20vor%2C%20Sie%20betreiben%20einen%20Food-Truck%20auf%20dem%20Wochenmarkt%20in%20Ostwestfalen-Lippe.%20Sie%20verkaufen%20jeden%20Samstag%20eine%20begehrte%20regionale%20**'OWL-Bowl'**.%5Cn%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22**Die%20Fakten%3A**%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22-%20**Materialkosten%3A**%203.00%20%E2%82%AC%20pro%20Bowl%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22-%20**Verkaufspreis%3A**%2010.00%20%E2%82%AC%20pro%20Bowl%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22-%20**Restwert%3A**%202.50%20%E2%82%AC%20(Einige%20Zutaten%20k%C3%B6nnen%20am%20n%C3%A4chsten%20Tag%20weiterverwendet%20werden)%5Cn%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22**Ihre%20resultierende%20Kostenstruktur%3A**%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22-%20Kosten%20bei%20%C3%9Cberbestand%3A%20**0.50%20%E2%82%AC**%20(3.00%E2%82%AC%20-%202.50%E2%82%AC)%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22-%20Entgangener%20Gewinn%20bei%20Unterbestand%3A%20**7.00%20%E2%82%AC**%20(10.00%E2%82%AC%20-%203.00%E2%82%AC)%5Cn%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22Spielen%20Sie%2010%20Wochen%20durch.%20Vor%20jeder%20Woche%20sehen%20Sie%20die%20Wetterprognose%20und%20ob%20ein%20lokales%20Event%20ansteht.%20Versuchen%20Sie%2C%20den%20Gesamtgewinn%20so%20hoch%20wie%20m%C3%B6glich%20zu%20halten!%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%22---%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20start_btn%0A%20%20%20%20%20%20%20%20%5D)%0A%0A%20%20%20%20elif%20curr_state%5B%22phase%22%5D%20%3D%3D%20%22play%22%3A%0A%20%20%20%20%20%20%20%20week_idx%20%3D%20curr_state%5B%22week_idx%22%5D%0A%20%20%20%20%20%20%20%20df_play%20%3D%20curr_state%5B%22df%22%5D%0A%20%20%20%20%20%20%20%20row_play%20%3D%20df_play.iloc%5Bweek_idx%5D%0A%0A%20%20%20%20%20%20%20%20weather_stats%20%3D%20mo.Html(f%22%22%22%0A%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22scroll-container%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22stat-card%22%3E%3Cstrong%3ETemp%3A%3C%2Fstrong%3E%20%7Brow_play%5B'temp'%5D%3A.1f%7D%20%C2%B0C%3C%2Fdiv%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22stat-card%22%3E%3Cstrong%3ERegen%3A%3C%2Fstrong%3E%20%7B'Ja'%20if%20row_play%5B'rain'%5D%20else%20'Nein'%7D%3C%2Fdiv%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22stat-card%22%3E%3Cstrong%3EEvent%3A%3C%2Fstrong%3E%20%7B'Ja'%20if%20row_play%5B'event'%5D%20else%20'Nein'%7D%3C%2Fdiv%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22stat-card%22%3E%3Cstrong%3EFerien%3A%3C%2Fstrong%3E%20%7B'Ja'%20if%20row_play%5B'holiday'%5D%20else%20'Nein'%7D%3C%2Fdiv%3E%0A%20%20%20%20%20%20%20%20%3C%2Fdiv%3E%0A%20%20%20%20%20%20%20%20%22%22%22)%0A%0A%20%20%20%20%20%20%20%20input_row%20%3D%20mo.hstack(%5Bq_input%2C%20submit_btn%5D%2C%20align%3D%22end%22%2C%20gap%3D1)%0A%0A%20%20%20%20%20%20%20%20game_ui%20%3D%20mo.vstack(%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(f%22%23%23%20Woche%20%7Bweek_idx%20%2B%201%7D%20von%2010%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%22**Wettervorhersage%20%26%20Kontext%3A**%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20weather_stats%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%22%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20input_row%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20history_table%20if%20history_table%20is%20not%20None%20else%20mo.md(%22%22)%0A%20%20%20%20%20%20%20%20%5D)%0A%0A%20%20%20%20elif%20curr_state%5B%22phase%22%5D%20%3D%3D%20%22feedback%22%3A%0A%20%20%20%20%20%20%20%20res%20%3D%20curr_state%5B%22last_result%22%5D%0A%20%20%20%20%20%20%20%20fb_week_idx%20%3D%20curr_state%5B%22week_idx%22%5D%0A%0A%20%20%20%20%20%20%20%20q%20%3D%20res%5B%22Bestellmenge%22%5D%0A%20%20%20%20%20%20%20%20d%20%3D%20res%5B%22Nachfrage%22%5D%0A%20%20%20%20%20%20%20%20profit%20%3D%20res%5B%22Gewinn%20(%E2%82%AC)%22%5D%0A%0A%20%20%20%20%20%20%20%20if%20q%20%3E%20d%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20calc_text%20%3D%20(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22**%C3%9Cberbestand%3A**%20Sie%20haben%20**%7Bq%7D**%20Bowls%20vorbereitet%2C%20aber%20die%20Nachfrage%20lag%20nur%20bei%20**%7Bd%7D**.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20**%7Bq%20-%20d%7D%20Bowls**%20wurden%20nicht%20verkauft.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20Kosten%20pro%20%C3%BCbrig%20gebliebener%20Bowl%3A%20**0.50%20%E2%82%AC**%20(Material%203.00%E2%82%AC%20-%20Restwert%202.50%E2%82%AC).%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20**Umsatz%3A**%2010.00%E2%82%AC%20*%20%7Bd%7D%20%3D%20**%7B10.00*d%3A.2f%7D%20%E2%82%AC**.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20**Materialkosten%3A**%203.00%E2%82%AC%20*%20%7Bq%7D%20%3D%20**%7B3.00*q%3A.2f%7D%20%E2%82%AC**.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20**Restwert%3A**%202.50%E2%82%AC%20*%20%7Bq-d%7D%20%3D%20**%7B2.50*(q-d)%3A.2f%7D%20%E2%82%AC**.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20**Gewinn%3A**%2010.00%E2%82%AC%20*%20%7Bd%7D%20(Umsatz)%20-%203.00%E2%82%AC%20*%20%7Bq%7D%20(Kosten)%20%2B%202.50%E2%82%AC%20*%20%7Bq-d%7D%20(Restwert)%20%3D%20**%7Bprofit%3A.2f%7D%20%E2%82%AC**.%22%0A%20%20%20%20%20%20%20%20%20%20%20%20)%0A%20%20%20%20%20%20%20%20elif%20q%20%3C%20d%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20calc_text%20%3D%20(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22**Unterbestand%3A**%20Sie%20haben%20**%7Bq%7D**%20Bowls%20vorbereitet%20bei%20einer%20Nachfrage%20von%20**%7Bd%7D**.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20**%7Bd%20-%20q%7D%20Kunden**%20konnten%20nicht%20bedient%20werden.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20Entgangener%20Gewinn%20pro%20nicht%20verkaufter%20Bowl%3A%20**7.00%20%E2%82%AC**%20(Verkauf%2010.00%E2%82%AC%20-%20Material%203.00%E2%82%AC).%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20**Umsatz%3A**%2010.00%E2%82%AC%20*%20%7Bq%7D%20%3D%20**%7B10.00*q%3A.2f%7D%20%E2%82%AC**.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20**Materialkosten%3A**%203.00%E2%82%AC%20*%20%7Bq%7D%20%3D%20**%7B3.00*q%3A.2f%7D%20%E2%82%AC**.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20**Gewinn%3A**%2010.00%E2%82%AC%20*%20%7Bq%7D%20(Umsatz)%20-%203.00%E2%82%AC%20*%20%7Bq%7D%20(Kosten)%20%3D%20**%7Bprofit%3A.2f%7D%20%E2%82%AC**.%22%0A%20%20%20%20%20%20%20%20%20%20%20%20)%0A%20%20%20%20%20%20%20%20else%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20calc_text%20%3D%20(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22**Perfekte%20Punktlandung!**%20Sie%20haben%20exakt%20**%7Bq%7D**%20Bowls%20vorbereitet%20und%20alle%20**%7Bd%7D**%20Bowls%20verkauft.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20**Umsatz%3A**%2010.00%E2%82%AC%20*%20%7Bq%7D%20%3D%20**%7B10.00*q%3A.2f%7D%20%E2%82%AC**.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20**Materialkosten%3A**%203.00%E2%82%AC%20*%20%7Bq%7D%20%3D%20**%7B3.00*q%3A.2f%7D%20%E2%82%AC**.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20f%22-%20**Gewinn%3A**%2010.00%E2%82%AC%20*%20%7Bq%7D%20(Umsatz)%20-%203.00%E2%82%AC%20*%20%7Bq%7D%20(Kosten)%20%3D%20**%7Bprofit%3A.2f%7D%20%E2%82%AC**.%22%0A%20%20%20%20%20%20%20%20%20%20%20%20)%0A%0A%20%20%20%20%20%20%20%20res_stats%20%3D%20mo.Html(f%22%22%22%0A%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22scroll-container%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22stat-card%22%3E%3Cstrong%3EBestellt%3A%3C%2Fstrong%3E%20%7Bq%7D%3C%2Fdiv%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22stat-card%22%3E%3Cstrong%3ENachfrage%3A%3C%2Fstrong%3E%20%7Bd%7D%3C%2Fdiv%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22stat-card%22%20style%3D%22background%3A%20%23e6fcf5%3B%20border-color%3A%20%23c3fae8%3B%20color%3A%20%230ca678%3B%22%3E%3Cstrong%3EGewinn%3A%3C%2Fstrong%3E%20%7Bprofit%3A.2f%7D%20%E2%82%AC%3C%2Fdiv%3E%0A%20%20%20%20%20%20%20%20%3C%2Fdiv%3E%0A%20%20%20%20%20%20%20%20%22%22%22)%0A%0A%20%20%20%20%20%20%20%20game_ui%20%3D%20mo.vstack(%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(f%22%23%23%20Ergebnis%20f%C3%BCr%20Woche%20%7Bres%5B'Woche'%5D%7D%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20res_stats%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%22---%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%22%23%23%23%20Gewinn-Berechnung%3A%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(calc_text)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%22%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20next_btn%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20history_table%20if%20history_table%20is%20not%20None%20else%20mo.md(%22%22)%0A%20%20%20%20%20%20%20%20%5D)%0A%0A%20%20%20%20elif%20curr_state%5B%22phase%22%5D%20%3D%3D%20%22end%22%3A%0A%20%20%20%20%20%20%20%20history_df%20%3D%20pd.DataFrame(curr_state%5B%22history%22%5D)%0A%20%20%20%20%20%20%20%20total_profit%20%3D%20history_df%5B%22Gewinn%20(%E2%82%AC)%22%5D.sum()%0A%0A%20%20%20%20%20%20%20%20game_ui%20%3D%20mo.vstack(%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%22%23%23%20Spielende!%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(f%22Ihr%20erzielter%20Gesamtgewinn%3A%20**%7Btotal_profit%3A.2f%7D%20%E2%82%AC**%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20history_table%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(%22%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20restart_btn%0A%20%20%20%20%20%20%20%20%5D)%0A%0A%20%20%20%20return%20(game_ui%2C)%0A%0A%0A%40app.cell%0Adef%20_(game_ui)%3A%0A%20%20%20%20game_ui%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(mo)%3A%0A%20%20%20%20style%20%3D%20mo.Html(%22%22%22%0A%20%20%20%20%3Cstyle%3E%0A%20%20%20%20.scroll-container%20%7B%0A%20%20%20%20%20%20%20%20display%3A%20flex%3B%0A%20%20%20%20%20%20%20%20overflow-x%3A%20auto%3B%0A%20%20%20%20%20%20%20%20white-space%3A%20nowrap%3B%0A%20%20%20%20%20%20%20%20gap%3A%208px%3B%0A%20%20%20%20%20%20%20%20padding%3A%208px%200%3B%0A%20%20%20%20%20%20%20%20-webkit-overflow-scrolling%3A%20touch%3B%0A%20%20%20%20%7D%0A%20%20%20%20.stat-card%20%7B%0A%20%20%20%20%20%20%20%20flex%3A%200%200%20auto%3B%0A%20%20%20%20%20%20%20%20background%3A%20%23f1f3f5%3B%0A%20%20%20%20%20%20%20%20border%3A%201px%20solid%20%23dee2e6%3B%0A%20%20%20%20%20%20%20%20border-radius%3A%206px%3B%0A%20%20%20%20%20%20%20%20padding%3A%208px%2012px%3B%0A%20%20%20%20%20%20%20%20font-size%3A%2014px%3B%0A%20%20%20%20%20%20%20%20box-shadow%3A%200%201px%203px%20rgba(0%2C0%2C0%2C0.05)%3B%0A%20%20%20%20%20%20%20%20font-family%3A%20system-ui%2C%20-apple-system%2C%20sans-serif%3B%0A%20%20%20%20%7D%0A%20%20%20%20%2F*%20Prevent%20table%20text%20wrapping%20and%20enable%20horizontal%20scrolling%20*%2F%0A%20%20%20%20table%2C%20th%2C%20td%20%7B%0A%20%20%20%20%20%20%20%20white-space%3A%20nowrap%20!important%3B%0A%20%20%20%20%7D%0A%20%20%20%20.marimo-table%2C%20div.table-container%2C%20table%20%7B%0A%20%20%20%20%20%20%20%20display%3A%20block%20!important%3B%0A%20%20%20%20%20%20%20%20overflow-x%3A%20auto%20!important%3B%0A%20%20%20%20%20%20%20%20max-width%3A%20100%25%20!important%3B%0A%20%20%20%20%7D%0A%20%20%20%20%3C%2Fstyle%3E%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%20(style%2C)%0A%0A%0A%40app.cell%0Adef%20_(style)%3A%0A%20%20%20%20style%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+    <!-- This is a portal for the data editor to render in -->
+    <div id="portal" data-testid="glide-portal" style="position: fixed; left: 0; top: 0; z-index: 9999"></div>
+    <script data-marimo="true">
+      Object.defineProperty(window, "__MARIMO_MOUNT_CONFIG__", {
+        value: Object.freeze({
+            "filename": "notebook.py",
+            "cwd": "",
+            "lspWorkspace": null,
+            "mode": "read",
+            "version": "0.23.6",
+            "serverToken": "unused",
+            "config": {"ai": {"custom_providers": {}, "models": {"custom_models": [], "displayed_models": []}}, "completion": {"activate_on_typing": true, "copilot": false, "signature_hint_on_typing": false}, "diagnostics": {"sql_linter": true}, "display": {"cell_output": "below", "code_editor_font_size": 14, "dataframes": "rich", "default_table_max_columns": 50, "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": true, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": false}}, "mcp": {"mcpServers": {}, "presets": []}, "package_management": {"manager": "pip"}, "runtime": {"auto_instantiate": false, "auto_reload": "off", "default_csv_encoding": "utf-8", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "show_tracebacks": false, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"sql_output": "auto", "width": "medium"},
+            "view": {"showAppCode": false},
+            "notebook": null,
+            "session": null,
+            "runtimeConfig": null,
+        }),
+        writable: false,
+        configurable: false,
+      });
+    </script>
+  </body>
+</html>
